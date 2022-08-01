@@ -1,4 +1,4 @@
-import { createGlobalStyle } from "styled-components";
+import { createGlobalStyle } from 'styled-components';
 
 export const GlobalStyle = createGlobalStyle`
 @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400&display=swap');
@@ -47,5 +47,7 @@ table {
     border-collapse: collapse;
     border-spacing: 0;
 }
-`
-;
+*{
+    box-sizing: border-box;
+}
+`;
