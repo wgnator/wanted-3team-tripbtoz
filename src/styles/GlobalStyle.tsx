@@ -21,8 +21,9 @@ time, mark, audio, video {
     padding: 0;
     border: 0;
     font-size: 100%;
-  font-family: 'Source Sans Pro', sans-serif;
+    font-family: 'Source Sans Pro', sans-serif;
     vertical-align: baseline;
+    -webkit-tap-highlight-color: transparent;
 }
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure, 
