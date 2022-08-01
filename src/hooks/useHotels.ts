@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { hotelsService } from '../api/axiosInstance';
 import { Hotel, UserDataType } from '../interfaces/types';
 import { getExceptedHotelsQueryString } from '../utils/getQueryString';
@@ -28,6 +28,10 @@ export default function useHotels() {
       setIsLoading(false);
     }, 500);
   }
+
+  useEffect(() => {
+    getAllByPage();
+  }, []);
 
   return { isLoading, hotels, getAllByPage, getResultsByPage };
 }
