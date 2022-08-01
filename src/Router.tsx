@@ -5,9 +5,9 @@ import Registration from './pages/Registration';
 export default function Router() {
   return (
     <BrowserRouter>
+      <Header />
       <Routes>
-        <Route path="/" element={<Registration />} />
-        <Route path="/applicants" element={<ApplyStatus />} />
+        <Route path="/" element={<Page />} />
       </Routes>
     </BrowserRouter>
   );
