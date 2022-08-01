@@ -32,7 +32,7 @@ export default function InputSearch({ isFocusInput, setIsFocusInput }: InputSear
       <SearchIcon />
       <SearchInput placeholder="지역명, 호텔명, 펜션명 검색" onFocus={doFocus} onBlur={doUnfocus} ref={inputRef} />
       <IconContainer onClick={doUnfocus}>
-        <XIcon isEnable={isFocusInput} />
+        <XIcon hidden={!isFocusInput} />
       </IconContainer>
     </InputSearchWrapper>
   );
