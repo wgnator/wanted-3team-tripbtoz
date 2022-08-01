@@ -1,13 +1,18 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import ApplyStatus from './pages/ApplyStatus';
-import Registration from './pages/Registration';
+import Layout from './components/Layout';
+import DetailsPage from './pages/DetailsPage';
+import Main from './pages/MainPage';
+import ReservationStatusPage from './pages/ReservationStatusPage';
 
 export default function Router() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Registration />} />
-        <Route path="/applicants" element={<ApplyStatus />} />
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Main />} />
+          <Route path="detail" element={<DetailsPage />} />
+          <Route path="reservation" element={<ReservationStatusPage />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );
