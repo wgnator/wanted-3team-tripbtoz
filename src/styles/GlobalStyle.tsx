@@ -1,4 +1,4 @@
-import { createGlobalStyle } from "styled-components";
+import { createGlobalStyle } from 'styled-components';
 
 export const GlobalStyle = createGlobalStyle`
 @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400&display=swap');
@@ -21,8 +21,9 @@ time, mark, audio, video {
     padding: 0;
     border: 0;
     font-size: 100%;
-  font-family: 'Source Sans Pro', sans-serif;
+    font-family: 'Source Sans Pro', sans-serif;
     vertical-align: baseline;
+    list-style: none;
 }
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure, 
@@ -47,5 +48,7 @@ table {
     border-collapse: collapse;
     border-spacing: 0;
 }
-`
-;
+*{
+    box-sizing: border-box;
+}
+`;
