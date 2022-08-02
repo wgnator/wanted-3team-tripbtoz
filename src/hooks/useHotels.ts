@@ -6,7 +6,15 @@ import { getExceptedHotelsQueryString } from '../utils/getQueryString';
 export default function useHotels() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [hotels, setHotels] = useState<Hotel[]>([]);
-  const [userHotels, setUserHotels] = useState<UserDataType[]>([]);
+  const userHotels = Object.values(window.localStorage)
+    .map((value) => JSON.parse(value))
+    .filter(
+      (value) =>
+        Object.keys(value).includes('hotelName') &&
+        Object.keys(value).includes('checkInDate') &&
+        Object.keys(value).includes('checkOutDate') &&
+        Object.keys(value).includes('numberOfGuests'),
+    );
 
   async function getAllByPage(page: number = 1) {
     setIsLoading(true);
@@ -32,17 +40,7 @@ export default function useHotels() {
 
   useEffect(() => {
     getAllByPage();
-    const localStorage = Object.values(window.localStorage)
-      .map((value) => JSON.parse(value))
-      .filter(
-        (value) =>
-          Object.keys(value).includes('hotelName') &&
-          Object.keys(value).includes('checkInDate') &&
-          Object.keys(value).includes('checkOutDate') &&
-          Object.keys(value).includes('numberOfGuests'),
-      );
-    setUserHotels(localStorage);
   }, []);
 
-  return { isLoading, hotels, userHotels, getAllByPage, getResultsByPage };
+  return { isLoading, hotels, getAllByPage, getResultsByPage };
 }
