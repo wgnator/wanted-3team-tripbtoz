@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import styled from 'styled-components';
-import SearchIcon from '../../assets/Search';
-import XIcon from '../../assets/X';
+import SearchIcon from '../../assets/search';
+import XIcon from '../../assets/x';
 import { theme } from '../../styles/theme';
 
 interface InputSearchProps {

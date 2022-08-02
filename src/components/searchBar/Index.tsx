@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import styled from 'styled-components';
-import SearchIcon from '../../assets/Search';
+import SearchIcon from '../../assets/search';
 import { theme } from '../../styles/theme';
 import InputSearch from './InputSearch';
 import OptionSelector from './OptionSelector';
