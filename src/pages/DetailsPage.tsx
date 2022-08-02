@@ -15,11 +15,11 @@ export default function DetailsPage() {
         </HotelInformation>
         <RoomInformation>
           <RoomTypeContainer>
+            <RoomImage src="/images/room.jpg" alt="hotel" />
             <RoomTypeInformation>
               <RoomType>Room</RoomType>
               <Occupancy>기준 2인 | 최대 2인</Occupancy>
             </RoomTypeInformation>
-            <RoomImage src="/images/room.jpg" alt="hotel" />
           </RoomTypeContainer>
           <ReservationContainer>
             <div>
@@ -132,19 +132,19 @@ const RoomImage = styled.img`
   border-radius: 4px;
   object-fit: cover;
 
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 480px) {
     width: 100%;
-    height: 36.1111vw;
+    height: auto;
   }
 `;
 
 const RoomTypeContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  flex-direction: row-reverse;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 0.5rem;
 
-  @media screen and (max-width: 768px) {
-    display: block;
+  @media screen and (max-width: 1024px) {
+    grid-template-columns: 1fr 2fr;
   }
 `;
 
@@ -152,11 +152,6 @@ const RoomTypeInformation = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  width: 457px;
-
-  @media screen and (max-width: 768px) {
-    width: 100%;
-  }
 `;
 
 const RoomType = styled.div`
@@ -195,3 +190,4 @@ const ReservationButton = styled.button`
   margin-top: 0.6rem;
   border-radius: 4px;
 `;
+
