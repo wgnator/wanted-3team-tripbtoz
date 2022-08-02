@@ -28,7 +28,11 @@ export default function useHotels() {
   async function getResultsByPage(searchParameter: UserDataType, page: number = 1) {
     setIsLoading(true);
     const searchString = searchParameter.hotelName?.split(' ').join('+') || '';
-    const neQueryString = getExceptedHotelsQueryString(searchParameter.checkInDate, searchParameter.checkOutDate);
+    const neQueryString = getExceptedHotelsQueryString(
+      searchParameter.checkInDate,
+      searchParameter.checkOutDate,
+      userHotels,
+    );
     setTimeout(async () => {
       const data = await hotelsService.get(
         `?occupancy.max_gte=${searchParameter.numberOfGuests}&q=${searchString}${neQueryString}&_page=${page}`,
