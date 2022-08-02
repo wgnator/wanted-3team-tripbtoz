@@ -1,3 +1,4 @@
+import React from 'react';
 import { useState, useEffect } from 'react';
 import { hotelsService } from '../api/axiosInstance';
 import { Hotel, UserDataType } from '../interfaces/types';
@@ -6,8 +7,8 @@ import { getExceptedHotelsQueryString } from '../utils/getQueryString';
 export default function useHotels() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [hotels, setHotels] = useState<Hotel[]>([]);
-
   async function getAllByPage(page: number = 1) {
+    
     setIsLoading(true);
     setTimeout(async () => {
       const data = await hotelsService.get(`?_page=${page}`);

@@ -5,23 +5,22 @@ interface props {
   hotel:Hotel
 }
 export default function MainHotelCard({hotel}:props) {
-  const [loaded, setLoaded] = React.useState(true);
-  const [isLoading,setIsLoading] = React.useState<boolean>(true);
+  // const [loaded, setLoaded] = React.useState(true);
   const {hotel_name,occupancy} = hotel;
   const score = ["1","1","1","1","0.5"]
   const random = Number(Math.random().toFixed(1)) * 10;
-  React.useEffect(()=>{
-    setTimeout(()=>{
-      setLoaded(false)
-    },300)
-  },[])
-  if(loaded){
-    return <div></div>
-  }
+  // React.useEffect(()=>{
+  //   setTimeout(()=>{
+  //     setLoaded(false)
+  //   },300)
+  // },[])
+  // if(loaded){
+  //   return <div></div>
+  // }
   return (
     <Container>
       <ImgWrap>
-        <img src={`src/images/hotel${random}.png`} />
+        <img src={`src/images/hotel0.png`} />
       </ImgWrap>
       <ContentWrap>
         <HotelRating>5.0성급</HotelRating>

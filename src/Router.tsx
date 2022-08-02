@@ -9,11 +9,12 @@ export default function Router() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Main />} />
+        <Route index element={<Main />} />
+        {/* <Route path="/" element={<Layout />}>
+          
           <Route path="detail" element={<DetailsPage />} />
           <Route path="reservation" element={<ReservationStatusPage />} />
-        </Route>
+        </Route> */}
       </Routes>
     </BrowserRouter>
   );
