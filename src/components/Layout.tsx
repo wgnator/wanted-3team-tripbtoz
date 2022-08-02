@@ -1,6 +1,6 @@
 import { Outlet, useLocation } from 'react-router-dom';
 import Header from './Header';
-import SearchBar from './searchBar';
+import SearchBar from './searchBar/Index';
 
 export default function Layout() {
   const locate = useLocation();

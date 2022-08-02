@@ -1,13 +1,12 @@
 import { useState } from 'react';
 import styled from 'styled-components';
-import SearchIcon from '../../assets/search';
+import SearchIcon from '../../assets/Search';
 import { theme } from '../../styles/theme';
 import InputSearch from './InputSearch';
 import OptionSelector from './OptionSelector';
 
 export default function SearchBar() {
   const [isFocusInput, setIsFocusInput] = useState(false);
-
   const [numberOfPeople, setNumberOfPeople] = useState({ adult: 2, children: 0 });
 
   return (
@@ -39,6 +38,11 @@ const Wrapper = styled.div`
   align-items: center;
   border: 1px solid ${theme.borderColor};
   border-radius: 4px;
+  /* display: flex;
+  flex-direction: column;
+  @media (min-width: 450px) {
+    flex-direction: row;
+  } */
 `;
 
 const Datepicker = styled.div`

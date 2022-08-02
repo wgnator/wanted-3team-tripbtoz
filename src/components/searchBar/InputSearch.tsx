@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import styled from 'styled-components';
-import SearchIcon from '../../assets/search';
-import XIcon from '../../assets/x';
+import SearchIcon from '../../assets/Search';
+import XIcon from '../../assets/X';
 import { theme } from '../../styles/theme';
 
 interface InputSearchProps {
@@ -28,6 +28,7 @@ export default function InputSearch({ isFocusInput, setIsFocusInput }: InputSear
   };
 
   return (
+    // 래퍼를 라벨로 해보자
     <InputSearchWrapper onClick={doFocus}>
       <SearchIcon />
       <SearchInput placeholder="지역명, 호텔명, 펜션명 검색" onFocus={doFocus} onBlur={doUnfocus} ref={inputRef} />
