@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import styled from 'styled-components';
 import SearchIcon from '../../assets/search';
 import { theme } from '../../styles/theme';
@@ -6,15 +5,12 @@ import InputSearch from './InputSearch';
 import OptionSelector from './OptionSelector';
 
 export default function SearchBar() {
-  const [isFocusInput, setIsFocusInput] = useState(false);
-  const [numberOfPeople, setNumberOfPeople] = useState({ adult: 2, children: 0 });
-
   return (
     <Container>
       <Wrapper>
-        <InputSearch isFocusInput={isFocusInput} setIsFocusInput={setIsFocusInput} />
+        <InputSearch />
         <Datepicker />
-        <OptionSelector numberOfPeople={numberOfPeople} setNumberOfPeople={setNumberOfPeople} />
+        <OptionSelector />
         <Button>
           <SearchIcon />
         </Button>

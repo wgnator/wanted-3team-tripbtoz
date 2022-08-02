@@ -1,45 +1,42 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import styled from 'styled-components';
 import SearchIcon from '../../assets/search';
 import XIcon from '../../assets/x';
 import { theme } from '../../styles/theme';
 
-interface InputSearchProps {
-  isFocusInput: boolean;
-  setIsFocusInput: React.Dispatch<React.SetStateAction<boolean>>;
-}
+interface InputSearchProps {}
 
-export default function InputSearch({ isFocusInput, setIsFocusInput }: InputSearchProps) {
+export default function InputSearch({}: InputSearchProps) {
   const inputRef = useRef<HTMLInputElement>(null);
+  const [hasXIcon, setHasXIcon] = useState(false);
 
-  const focusInput = () => inputRef.current?.focus();
-  const unfocusInput = () => inputRef.current?.blur();
-
-  const doFocus = (event: React.MouseEvent<HTMLDivElement> | React.FocusEvent<HTMLInputElement>) => {
-    event.stopPropagation();
-    focusInput();
-    setIsFocusInput(true);
+  const clearInput = () => {
+    inputRef.current!.value = '';
+    setHasXIcon(false);
   };
 
-  const doUnfocus = (event: React.MouseEvent<HTMLDivElement> | React.FocusEvent<HTMLInputElement>) => {
-    event.stopPropagation();
-    unfocusInput();
-    setIsFocusInput(false);
+  const checkValue = () => {
+    if (inputRef.current?.value) {
+      setHasXIcon(true);
+      return;
+    }
+    setHasXIcon(false);
   };
+
+  // 할일: input search value를 리덕스에 저장
 
   return (
-    // 래퍼를 라벨로 해보자
-    <InputSearchWrapper onClick={doFocus}>
+    <InputSearchWrapper htmlFor="search_input">
       <SearchIcon />
-      <SearchInput placeholder="지역명, 호텔명, 펜션명 검색" onFocus={doFocus} onBlur={doUnfocus} ref={inputRef} />
-      <IconContainer onClick={doUnfocus}>
-        <XIcon hidden={!isFocusInput} />
+      <SearchInput id="search_input" placeholder="지역명, 호텔명, 펜션명 검색" onChange={checkValue} ref={inputRef} />
+      <IconContainer onClick={clearInput}>
+        <XIcon hidden={!hasXIcon} />
       </IconContainer>
     </InputSearchWrapper>
   );
 }
 
-const InputSearchWrapper = styled.div`
+const InputSearchWrapper = styled.label`
   height: 100%;
   width: 100%;
   display: flex;
