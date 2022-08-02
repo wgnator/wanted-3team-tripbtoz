@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import styled from 'styled-components';
 import UserSingle from '../../assets/UserSingle';
 import { theme } from '../../styles/theme';
@@ -13,6 +14,8 @@ interface Container {
 }
 
 export default function OptionSelector({ numberOfPeople, setNumberOfPeople }: Container) {
+  const [isOpen, setIsOpen] = useState(false);
+
   const isLessThen = (number: number, lessThen: number) => number < lessThen;
   const isMoreThen = (number: number, moreThen: number) => number > moreThen;
 
@@ -42,41 +45,55 @@ export default function OptionSelector({ numberOfPeople, setNumberOfPeople }: Co
     setNumberOfPeople((prevState) => ({ ...prevState, children: prevState.children - 1 }));
   };
 
+  const openSelecter = () => setIsOpen((openState) => !openState);
+  const closeSelector = () => setIsOpen(false);
+
   return (
     <Container>
-      <Column>
-        <UserSingle width="1.5rem" height="1.5rem" />
-      </Column>
-      <Column>
-        <Span styledColor={theme.fontLightColor} thin={true} smallFont={true}>
-          인원
-        </Span>
-        <Span>{numberOfPeople.adult + numberOfPeople.children} 명</Span>
-      </Column>
-      <Counter>
-        <Row>
-          <Label>성인</Label>
-          <CountWrapper>
-            <MinusButton disabled={numberOfPeople.adult === MINIMUM.adult} onClick={adultDecrease} />
-            <Count>{numberOfPeople.adult}</Count>
-            <PlusButton disabled={numberOfPeople.adult === MAXIMUM.adult} onClick={adultIncrease} />
-          </CountWrapper>
-        </Row>
-        <Row>
-          <Label>아이</Label>
-          <CountWrapper>
-            <MinusButton disabled={numberOfPeople.children === MINIMUM.children} onClick={childrenDecrease} />
-            <Count>{numberOfPeople.children}</Count>
-            <PlusButton disabled={numberOfPeople.children === MAXIMUM.children} onClick={childrenIncrease} />
-          </CountWrapper>
-        </Row>
-      </Counter>
+      <Printer onClick={openSelecter}>
+        <Column>
+          <UserSingle width="1.5rem" height="1.5rem" />
+        </Column>
+        <Column>
+          <Span styledColor={theme.fontLightColor} thin={true} smallFont={true}>
+            인원
+          </Span>
+          <Span>{numberOfPeople.adult + numberOfPeople.children} 명</Span>
+        </Column>
+      </Printer>
+      {isOpen && (
+        <>
+          <Selecter onBlur={closeSelector}>
+            <Row>
+              <Label>성인</Label>
+              <CountWrapper>
+                <MinusButton disabled={numberOfPeople.adult === MINIMUM.adult} onClick={adultDecrease} />
+                <Count>{numberOfPeople.adult}</Count>
+                <PlusButton disabled={numberOfPeople.adult === MAXIMUM.adult} onClick={adultIncrease} />
+              </CountWrapper>
+            </Row>
+            <Row>
+              <Label>아이</Label>
+              <CountWrapper>
+                <MinusButton disabled={numberOfPeople.children === MINIMUM.children} onClick={childrenDecrease} />
+                <Count>{numberOfPeople.children}</Count>
+                <PlusButton disabled={numberOfPeople.children === MAXIMUM.children} onClick={childrenIncrease} />
+              </CountWrapper>
+            </Row>
+          </Selecter>
+          <ModalBackground onClick={closeSelector} />
+        </>
+      )}
     </Container>
   );
 }
 
 const Container = styled.div`
   position: relative;
+  width: 100%;
+  display: flex;
+`;
+const Printer = styled.div`
   display: flex;
   width: 100%;
   padding: 1rem;
@@ -94,7 +111,16 @@ const Span = styled.span<{ styledColor?: string; thin?: boolean; smallFont?: boo
   ${(props) => props.smallFont && `font-size: 0.7rem`};
 `;
 
-const Counter = styled.div`
+const ModalBackground = styled.div`
+  opacity: 0.2;
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 50;
+`;
+const Selecter = styled.div`
   position: absolute;
   width: 360px;
   top: 66px;
@@ -106,6 +132,7 @@ const Counter = styled.div`
   padding: 1rem;
   border-radius: 4px;
   gap: 1.5rem;
+  z-index: 100;
 `;
 const Row = styled.div`
   display: flex;
