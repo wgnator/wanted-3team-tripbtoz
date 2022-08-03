@@ -1,9 +1,7 @@
 import areIntervalsOverlapping from 'date-fns/areIntervalsOverlapping';
-import { UserDataType } from '../interfaces/types';
-import { getLocalStorage } from './storage';
+import { UserDataType, UserData } from '../interfaces/types';
 
-export function getExceptedHotelsQueryString(checkInDate: Date, checkOutDate: Date): string {
-  const userHotels = getLocalStorage('userHotels', []);
+export function getExceptedHotelsQueryString(checkInDate: Date, checkOutDate: Date, userHotels: UserData): string {
   const exceptedHotels = userHotels
     .filter((reservation: UserDataType) =>
       areIntervalsOverlapping(
