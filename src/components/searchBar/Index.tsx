@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import SearchIcon from '../../assets/search';
 import { theme } from '../../styles/theme';
+import Datepicker from './Datepicker';
 import InputSearch from './InputSearch';
 import OptionSelector from './OptionSelector';
 
@@ -39,12 +40,6 @@ const Wrapper = styled.div`
   @media (min-width: 450px) {
     flex-direction: row;
   } */
-`;
-
-const Datepicker = styled.div`
-  height: 100%;
-  width: 100%;
-  border-right: 1px solid ${theme.borderColor};
 `;
 
 const Button = styled.button`
