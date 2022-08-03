@@ -1,7 +1,7 @@
 import areIntervalsOverlapping from 'date-fns/areIntervalsOverlapping';
 import { UserDataType, UserData } from '../interfaces/types';
 
-export function getExceptedHotelsQueryString(searchParameter: UserDataType, userHotels: UserData): string {
+function getExceptedHotelsQueryString(searchParameter: UserDataType, userHotels: UserData): string {
   const exceptedHotels = userHotels
     .filter((reservation: UserDataType) =>
       areIntervalsOverlapping(
@@ -14,8 +14,9 @@ export function getExceptedHotelsQueryString(searchParameter: UserDataType, user
   return neQueryString;
 }
 
-export function getSearchQueryString(searchParameter: UserDataType): string {
+export function getSearchQueryString(searchParameter: UserDataType, userHotels: UserData): string {
   const searchString = searchParameter.hotelName?.split(' ').join('+') || '';
-  const searchQueyrString = `occupancy.max_gte=${searchParameter.numberOfGuests}&q=${searchString}`;
+  const neQueryString = getExceptedHotelsQueryString(searchParameter, userHotels);
+  const searchQueyrString = `occupancy.max_gte=${searchParameter.numberOfGuests}&q=${searchString}${neQueryString}`;
   return searchQueyrString;
 }
