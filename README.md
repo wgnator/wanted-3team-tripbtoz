@@ -16,9 +16,11 @@
 
 - userHotels는 예약한(로컬스토리지에 저장된) 호텔목록입니다.
 
-- getResultsByPage에 `(searchParameter: UserDataType | null, page: number = 1)` 를 주고 실행하면 검색조건에 맞는 새로운데이터를 요청합니다.
+- getResultsByPage에 `(searchParameter: UserDataType | null, page: number = 1)` 를 주고 실행하면 검색조건에 맞는 새로운데이터를 페이지당 10개씩 요청합니다.
 
-- 전체데이터를 요청하려면 getResultsByPage 함수의 첫번째 인자에 null을 주고 실행합니다.
+- 페이지 요청시 대기시간은 500ms 입니다.
+
+- 검색 결과가 아닌 전체데이터를 요청하려면 getResultsByPage 함수의 첫번째 인자에 null을 주고 실행합니다.
 
 ```ts
 interface UserDataType {
