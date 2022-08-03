@@ -2,26 +2,25 @@ import React from "react";
 import styled from "styled-components";
 import { Hotel } from "../interfaces/types";
 interface props {
-  hotel:Hotel
+  hotel:Hotel,
 }
 export default function MainHotelCard({hotel}:props) {
-  const [loaded, setLoaded] = React.useState(true);
-  const [isLoading,setIsLoading] = React.useState<boolean>(true);
+  // const [loaded, setLoaded] = React.useState(true);
   const {hotel_name,occupancy} = hotel;
   const score = ["1","1","1","1","0.5"]
   const random = Number(Math.random().toFixed(1)) * 10;
-  React.useEffect(()=>{
-    setTimeout(()=>{
-      setLoaded(false)
-    },300)
-  },[])
-  if(loaded){
-    return <div></div>
-  }
+  // React.useEffect(()=>{
+  //   setTimeout(()=>{
+  //     setLoaded(false)
+  //   },300)
+  // },[])
+  // if(loaded){
+  //   return <div></div>
+  // }
   return (
-    <Container>
+    <Container >
       <ImgWrap>
-        <img src={`src/images/hotel${random}.png`} />
+        <img src={`src/images/hotel0.png`} />
       </ImgWrap>
       <ContentWrap>
         <HotelRating>5.0성급</HotelRating>
@@ -36,8 +35,8 @@ export default function MainHotelCard({hotel}:props) {
               return <div key={"score"+index}></div>
             })}
           </ValueScore>
-          <ValueReview>총 {Math.floor(123 * Number(Math.random().toFixed(1)) * 10)}건의 리뷰</ValueReview>
-
+          <ValueReview>총 111건의 리뷰</ValueReview>
+{/* {Math.floor(123 * Number(Math.random().toFixed(1)) * 10)} */}
         </HotelValue>
         <HotelPrice>
           <p>{Math.floor(123456 * Number(Math.random().toFixed(1)) * 10).toLocaleString('ko-KR')} 원</p>
