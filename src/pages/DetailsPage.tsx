@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { theme } from '../styles/theme';
+import { MOBILE_BREAKPOINT, TABLET_BREAKPOINT } from '../constants/constants';
 
 export default function DetailsPage() {
   return (
@@ -41,7 +42,7 @@ const Container = styled.div`
   padding: 1rem 0;
   background-color: ${theme.onHoverBackgroundColor};
 
-  @media screen and (max-width: 1024px) {
+  @media screen and (max-width: ${TABLET_BREAKPOINT}px) {
     background-color: white;
   }
 `;
@@ -51,13 +52,13 @@ const Content = styled.div`
   margin: 0 auto;
   background-color: ${theme.onHoverBackgroundColor};
 
-  @media screen and (max-width: 1024px) {
-    width: 768px;
+  @media screen and (max-width: ${TABLET_BREAKPOINT}px) {
+    width: ${MOBILE_BREAKPOINT}px;
     display: block;
     box-shadow: rgb(153 153 153) 0px 10px 55px;
   }
 
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: ${MOBILE_BREAKPOINT}px) {
     width: 100%;
   }
 `;
@@ -66,7 +67,7 @@ const HotelInformation = styled.div`
   display: flex;
   justify-content: space-between;
 
-  @media screen and (max-width: 1024px) {
+  @media screen and (max-width: ${TABLET_BREAKPOINT}px) {
     flex-direction: column;
   }
 `;
@@ -77,7 +78,7 @@ const HotelImage = styled.img`
   display: block;
   object-fit: cover;
 
-  @media screen and (max-width: 1024px) {
+  @media screen and (max-width: ${TABLET_BREAKPOINT}px) {
     width: 100%;
     height: auto;
   }
@@ -89,7 +90,7 @@ const HotelIntroduction = styled.div`
   padding: 1.5rem 1rem;
   background-color: white;
 
-  @media screen and (max-width: 1024px) {
+  @media screen and (max-width: ${TABLET_BREAKPOINT}px) {
     width: 100%;
   }
 `;
@@ -121,7 +122,7 @@ const RoomInformation = styled.div`
   padding: 24px;
   background-color: white;
 
-  @media screen and (max-width: 1024px) {
+  @media screen and (max-width: ${TABLET_BREAKPOINT}px) {
     width: 100%;
   }
 `;
@@ -132,9 +133,9 @@ const RoomImage = styled.img`
   border-radius: 4px;
   object-fit: cover;
 
-  @media screen and (max-width: 480px) {
+  @media screen and (max-width: ${MOBILE_BREAKPOINT}px) {
     width: 100%;
-    height: auto;
+   height: 36.1111vw;;
   }
 `;
 
@@ -143,8 +144,13 @@ const RoomTypeContainer = styled.div`
   grid-template-columns: 1fr 1fr;
   gap: 0 0.5rem;
 
-  @media screen and (max-width: 1024px) {
+  @media screen and (max-width: ${TABLET_BREAKPOINT}px) {
     grid-template-columns: 1fr 2fr;
+  }
+
+  @media screen and (max-width: ${MOBILE_BREAKPOINT}px) {
+   display: flex;
+   flex-direction: column-reverse;
   }
 `;
 
