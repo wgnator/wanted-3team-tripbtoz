@@ -9,14 +9,6 @@ export default function MainHotelCard({hotel}:props) {
   const {hotel_name,occupancy} = hotel;
   const score = ["1","1","1","1","0.5"]
   const random = Number(Math.random().toFixed(1)) * 10;
-  // React.useEffect(()=>{
-  //   setTimeout(()=>{
-  //     setLoaded(false)
-  //   },300)
-  // },[])
-  // if(loaded){
-  //   return <div></div>
-  // }
   return (
     <Container >
       <ImgWrap>
@@ -27,8 +19,7 @@ export default function MainHotelCard({hotel}:props) {
         <HotelName>{hotel_name}</HotelName>
         <HotelAddress>주소지 불명</HotelAddress>
         <HotelValue>
-          {/* <img src="src/images/tripadvisor.png"/> */}
-          {/* <span /> */}
+
           <i></i>
           <ValueScore>
             {score.map((score:string,index:number)=>{
@@ -36,10 +27,9 @@ export default function MainHotelCard({hotel}:props) {
             })}
           </ValueScore>
           <ValueReview>총 111건의 리뷰</ValueReview>
-{/* {Math.floor(123 * Number(Math.random().toFixed(1)) * 10)} */}
         </HotelValue>
         <HotelPrice>
-          <p>{Math.floor(123456 * Number(Math.random().toFixed(1)) * 10).toLocaleString('ko-KR')} 원</p>
+          <p>100,000 원</p>
         </HotelPrice>
         <HotelNotPrice>세금 및 수수료 불포함</HotelNotPrice>
       </ContentWrap>
