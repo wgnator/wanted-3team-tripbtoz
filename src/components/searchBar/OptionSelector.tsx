@@ -83,15 +83,24 @@ export default function OptionSelector({}: OptionSelectorProps) {
   );
 }
 
-const Container = styled.div`
+export const Container = styled.div`
   position: relative;
-  width: 100%;
+  width: fit-content;
+  height: 100%;
   display: flex;
+  white-space: nowrap;
+  border-right: 1px solid ${theme.borderColor};
+  cursor: pointer;
+  :hover {
+    background-color: ${theme.onHoverBackgroundColor};
+  }
 `;
-const Printer = styled.div`
+export const Printer = styled.div`
   display: flex;
+  align-items: center;
+  height: 100%;
   width: 100%;
-  padding: 1rem;
+  padding: 0 1rem;
   gap: 1rem;
 `;
 const Column = styled.div`
@@ -106,7 +115,7 @@ const Span = styled.span<{ styledColor?: string; thin?: boolean; smallFont?: boo
   ${(props) => props.smallFont && `font-size: 0.7rem`};
 `;
 
-const ModalBackground = styled.div`
+export const ModalBackground = styled.div`
   opacity: 0.2;
   width: 100vw;
   height: 100vh;
@@ -114,10 +123,12 @@ const ModalBackground = styled.div`
   top: 0;
   left: 0;
   z-index: 50;
+  cursor: default;
 `;
-const Selecter = styled.div`
+export const Selecter = styled.div`
   position: absolute;
-  width: 360px;
+  min-width: 360px;
+  max-width: 480px;
   top: 66px;
   right: 4px;
   display: flex;
