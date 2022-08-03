@@ -2,11 +2,13 @@ import {
   addDays,
   areIntervalsOverlapping,
   differenceInCalendarDays,
+  endOfDay,
   endOfMonth,
   formatISO,
   getDate,
   getMonth,
   getYear,
+  isPast,
   isSameDay,
   isSameMonth,
   isSunday,
@@ -22,6 +24,7 @@ import { IoIosArrowDropleft, IoIosArrowDropright } from 'react-icons/io';
 import { CheckInAndOut } from './DateSelection';
 
 type DateItemPropsType = {
+  isPast?: boolean;
   selectedAs?: 'start' | 'end' | 'between' | null;
   endDateSelected?: boolean;
   startDateSelected?: boolean;
@@ -149,6 +152,7 @@ export default function DatePicker({ initialDates, setCheckInAndOut }: DatePicke
                       return isSameMonth(date, month) ? (
                         <DateItem
                           key={formatISO(date)}
+                          isPast={isPast(endOfDay(date))}
                           selectedAs={checkIsSelectedAs(date)}
                           endDateSelected={!!selectedDates.endDate}
                           startDateSelected={!!selectedDates.startDate}
@@ -190,10 +194,17 @@ const Container = styled.div`
 `;
 const ArrowWrapper = styled.div<{ direction: 'left' | 'right' }>`
   position: absolute;
-  top: 1rem;
+  top: 1.5rem;
   ${(props) => (props.direction === 'left' ? `left: 2rem;` : `right: 2rem;`)}
-  width: 1rem;
-  height: 1rem;
+  * {
+    transform: scale(1.2);
+    transform-origin: center;
+    fill: ${theme.borderColor};
+  }
+  *:first-child {
+    width: 1.2rem;
+    height: 1.2rem;
+  }
   @media (max-width: 480px) {
     display: none;
   }
@@ -262,16 +273,19 @@ const DateItem = styled.div<DateItemPropsType>`
   color: ${(props) => (props.selectedAs !== null ? 'rgb(255, 255, 255)' : theme.fontDarkColor)};
   background-color: ${(props) => props.selectedAs === 'between' && theme.secondaryColor};
 
+  ${(props) => props.isPast && `pointer-events: none; color:${theme.fontLightColor}`}
   ${(props) =>
-    (props.selectedAs === 'start' &&
-      props.endDateSelected &&
-      `background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0) 49%, ${theme.secondaryColor} 50%, ${theme.secondaryColor} 100%);`) ||
-    (props.selectedAs === 'end' &&
-      props.startDateSelected &&
-      `background: linear-gradient(90deg, ${theme.secondaryColor} 0% ,  ${theme.secondaryColor} 49%, rgba(255,255,255,0) 50%, rgba(255,255,255,0) 100%);`)};
+    props.selectedAs === 'start' &&
+    props.endDateSelected &&
+    `background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0) 49%, ${theme.secondaryColor} 50%, ${theme.secondaryColor} 100%);`}
+  ${(props) =>
+    props.selectedAs === 'end' &&
+    props.startDateSelected &&
+    `background: linear-gradient(90deg, ${theme.secondaryColor} 0% ,  ${theme.secondaryColor} 49%, rgba(255,255,255,0) 50%, rgba(255,255,255,0) 100%);`};
 
   > div:first-child {
-    background-color: ${(props) => (props.selectedAs === 'start' || props.selectedAs === 'end') && theme.primaryColor};
+    ${(props) =>
+      (props.selectedAs === 'start' || props.selectedAs === 'end') && `background-color: ${theme.primaryColor}`};
   }
 `;
 
@@ -292,6 +306,7 @@ const DateTextWrapper = styled.div`
 const Dot = styled.div`
   color: ${theme.primaryColor};
   position: absolute;
+  z-index: -1;
   width: 100%;
   text-align: center;
   font-weight: bold;
