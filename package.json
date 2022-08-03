@@ -12,11 +12,7 @@
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.1.2",
     "@reduxjs/toolkit": "^1.8.3",
-<<<<<<< HEAD
-    "axios": "^0.27.2",
-=======
     "date-fns": "^2.29.1",
->>>>>>> 14b50f789fb713c01395cabf45000093b4fc8ccc
     "json-server": "^0.17.0",
     "react": "^18.2.0",
     "react-axios": "^2.0.6",
