@@ -71,7 +71,7 @@ export default function DateSelection({}: DateSelectionProps) {
       </DatepickerPrinter>
       {isOpen && (
         <>
-          <DatePicker setCheckInAndOut={setCheckInAndOut} />
+          <DatePicker initialDates={checkInAndOut} setCheckInAndOut={setCheckInAndOut} />
           <ModalBackground onClick={closeDatepicker} />
         </>
       )}
