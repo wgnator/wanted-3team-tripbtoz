@@ -13,3 +13,14 @@ export function getExceptedHotelsQueryString(checkInDate: Date, checkOutDate: Da
   const neQueryString = exceptedHotels.map((el: string) => `&hotel_name_ne=${el}`).join('');
   return neQueryString;
 }
+
+export function getSearchQueryString(searchParameter: UserDataType, userHotels: UserDataType[]) {
+  const searchString = searchParameter.hotelName?.split(' ').join('+') || '';
+  const neQueryString = getExceptedHotelsQueryString(
+    searchParameter.checkInDate,
+    searchParameter.checkOutDate,
+    userHotels,
+  );
+  const searchQueyrString = `occupancy.max_gte=${searchParameter.numberOfGuests}&q=${searchString}${neQueryString}`;
+  return searchQueyrString;
+}

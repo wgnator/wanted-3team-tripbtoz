@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { hotelsService } from '../api/axiosInstance';
 import { Hotel, UserDataType } from '../interfaces/types';
-import { getExceptedHotelsQueryString } from '../utils/getQueryString';
+import { getExceptedHotelsQueryString, getSearchQueryString } from '../utils/getQueryString';
 
 export default function useHotels() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -27,16 +27,9 @@ export default function useHotels() {
 
   async function getResultsByPage(searchParameter: UserDataType, page: number = 1) {
     setIsLoading(true);
-    const searchString = searchParameter.hotelName?.split(' ').join('+') || '';
-    const neQueryString = getExceptedHotelsQueryString(
-      searchParameter.checkInDate,
-      searchParameter.checkOutDate,
-      userHotels,
-    );
+    const searchQueryString = getSearchQueryString(searchParameter, userHotels);
     setTimeout(async () => {
-      const data = await hotelsService.get(
-        `?occupancy.max_gte=${searchParameter.numberOfGuests}&q=${searchString}${neQueryString}&_page=${page}`,
-      );
+      const data = await hotelsService.get(`?${searchQueryString}&_page=${page}`);
       page === 1 ? setHotels(data) : setHotels([...hotels, ...data]);
       setIsLoading(false);
     }, 500);
