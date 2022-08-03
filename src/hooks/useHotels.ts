@@ -46,5 +46,5 @@ export default function useHotels() {
     getAllByPage();
   }, []);
 
-  return { isLoading, hotels, getAllByPage, getResultsByPage };
+  return { isLoading, hotels, userHotels, getAllByPage, getResultsByPage };
 }
