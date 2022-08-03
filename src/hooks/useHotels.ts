@@ -5,11 +5,10 @@ import { Hotel, UserDataType } from '../interfaces/types';
 import { getExceptedHotelsQueryString } from '../utils/getQueryString';
 
 export default function useHotels() {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [hotels, setHotels] = useState<Hotel[]>([]);
   async function getAllByPage(page: number = 1) {
     
-    setIsLoading(true);
     setTimeout(async () => {
       const data = await hotelsService.get(`?_page=${page}`);
       page === 1 ? setHotels(data) : setHotels([...hotels, ...data]);
