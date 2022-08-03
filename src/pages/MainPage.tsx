@@ -1,46 +1,38 @@
-import axios from "axios";
 import React from "react";
 import styled from "styled-components";
 import MainHotelCard from "../components/MainHotelCard";
-import { Hotel,Hotels } from "../interfaces/types";
+import useHotels from "../hooks/useHotels";
+import { Hotel } from "../interfaces/types";
 
 export default function MainPage() {
-  const [hotelData,setHotelData] = React.useState<Hotels | []>([]);
-  const [pageNum,setPageNum] = React.useState(1);
-  const scrollRef = React.useRef();
+  const pageRef = React.useRef(1);
+  const {isLoading,hotels,getAllByPage} = useHotels();
 
   React.useEffect(()=>{
-  window.addEventListener("scroll", infiniteScroll);
-  return () => {window.removeEventListener('scroll', infiniteScroll)}
+      getAllByPage(pageRef.current);
+  },[isLoading])
+
+  React.useEffect(()=>{
+    window.addEventListener("scroll", infiniteScroll);
+    return () => {window.removeEventListener('scroll', infiniteScroll)}
   })
-
-  
-  React.useEffect(()=>{
-    console.log("페이지",pageNum);
-    axios.get(`http://localhost:8000/hotels?_page=${pageNum}&_limit=10`).then((response)=>{
-      pageNum === 1 ? setHotelData(response.data) : setHotelData([...hotelData,...response.data])
-    })
-  },[pageNum])
 
   function infiniteScroll () {
     const { scrollHeight,scrollTop,clientHeight  } = document.documentElement;
-    let timer;
-    console.log(Math.ceil(scrollTop + clientHeight), scrollHeight);
-    clearTimeout(timer)
-    timer = setTimeout(()=>{
-    if(Math.ceil(scrollTop + clientHeight) >= scrollHeight && Math.ceil(scrollTop + clientHeight) > innerWidth){
-      console.log("값 맞음",scrollHeight,Math.ceil(scrollTop + clientHeight));
-      setPageNum(prev => prev + 1)
-
+    if(scrollTop + clientHeight >= scrollHeight && scrollTop + clientHeight > innerWidth){
+      pageRef.current = pageRef.current + 1
+      getAllByPage(pageRef.current);
+    }else{
+      return
     }
-    },300)
-    
   }
 
   return (
     <Container>
       <HotelCards>
-        {hotelData?.map((hotel:Hotel)=> <MainHotelCard key={hotel.hotel_name} hotel={hotel} /> )}
+        {hotels?.map((hotel:Hotel,index:number)=> {
+             return <MainHotelCard key={"hotel"+index} hotel={hotel} />
+        } )}
       </HotelCards>
     </Container>
   );
@@ -52,7 +44,4 @@ const Container = styled.div`
   height: 100vh;
   margin: 0 auto;
 `;
-const HotelCards = styled.ul`
-
-`;
-
+const HotelCards = styled.ul``;
