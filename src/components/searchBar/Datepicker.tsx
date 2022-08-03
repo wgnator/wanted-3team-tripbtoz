@@ -1,298 +1,291 @@
-import { useEffect, useState } from 'react';
+import {
+  addDays,
+  areIntervalsOverlapping,
+  differenceInCalendarDays,
+  endOfMonth,
+  formatISO,
+  getDate,
+  getMonth,
+  getYear,
+  isSameDay,
+  isSameMonth,
+  nextSunday,
+  previousSunday,
+  startOfMonth,
+} from 'date-fns';
+import { addMonths, compareAsc } from 'date-fns/esm';
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { theme } from '../../styles/theme';
-import { Container, ModalBackground, Printer, Selecter } from './OptionSelector';
-import {
-  getDayGap,
-  getMonthDate,
-  getToday,
-  isAlonePoint,
-  isBetweenPoint,
-  isEndPoint,
-  isPastDate,
-  isSameDate,
-  isStartOrEndPoint,
-  isStartPoint,
-} from './services/datepickerService';
-
-interface DatepickerProps {}
-interface CheckInAndOut {
-  checkIn: Date;
-  checkOut: Date | null;
-}
-
-export type DaySelectTypes = 'startPoint' | 'endPotint' | 'betweenPoint' | 'alonePoint';
-interface DayProps {
-  isBlur?: boolean;
-  color?: string;
-  hasPointer?: boolean;
-  isSelect?: DaySelectTypes;
+import { IoIosArrowDropleft, IoIosArrowDropright } from 'react-icons/io';
+import { CheckInAndOut } from './DateSelection';
+type DateItemPropsType = {
+  selectedAsStart?: boolean;
+  selectedAsEnd?: boolean;
+  selectedAsBetween?: boolean;
+  endDateSelected?: boolean;
+  startDateSelected?: boolean;
   isToday?: boolean;
-  isPastDate?: boolean;
-}
+};
 
-export default function Datepicker({}: DatepickerProps) {
-  const today = getToday();
-  const [selectedDate, setSelectedDate] = useState(today);
-  const [checkInAndOut, setCheckInAndOut] = useState<CheckInAndOut>(() => {
-    const checkIn = new Date(today);
-    checkIn.setDate(checkIn.getDate() + 7);
-    const checkOut = new Date(checkIn);
-    checkOut.setDate(checkOut.getDate() + 1);
-    return { checkIn, checkOut };
+type SelectedDatesType = {
+  startDate: Date | null;
+  endDate: Date | null;
+};
+type DatePickerProps = {
+  setCheckInAndOut: Dispatch<SetStateAction<CheckInAndOut>>;
+};
+export default function DatePicker({ setCheckInAndOut }: DatePickerProps) {
+  const today = new Date();
+  const [selectedDates, setSelectedDates] = useState<SelectedDatesType>({
+    startDate: addDays(today, 7),
+    endDate: addDays(today, 8),
   });
-  const [monthDate, setMonthDate] = useState(getMonthDate(today));
-  const [isOpen, setIsOpen] = useState(false);
+  const windowRef = useRef<HTMLDivElement>(null);
+  const monthsWrapperRef = useRef<HTMLDivElement>(null);
 
-  const openDatepicker = () => {
-    setIsOpen((state) => !state);
-  };
-  const closeDatepicker = () => {
-    setIsOpen(false);
-  };
-
-  const giveColor = (day: number) => {
-    const SATURDAY = 6;
-    const SUNDAY = 0;
-    const SATURDAY_COLOR = '#4343ff';
-    const SUNDAY_COLOR = '#ff4141';
-    if (day === SATURDAY) return SATURDAY_COLOR;
-    if (day === SUNDAY) return SUNDAY_COLOR;
+  const WINDOW_WIDTH = useRef<number>(0);
+  const WHOLE_CALENDAR_WIDTH = useRef<number>(0);
+  const [hasCalendarReachedEnd, setHasCalendarReachedEnd] = useState({
+    left: true,
+    right: false,
+  });
+  const handleDateSelection = (selectedDate: Date) => {
+    if (selectedDates.startDate === null || (selectedDates.startDate && selectedDates.endDate))
+      setSelectedDates({ startDate: selectedDate, endDate: null });
+    else if (compareAsc(selectedDate, selectedDates.startDate) > 0)
+      setSelectedDates({ ...selectedDates, endDate: selectedDate });
+    else setSelectedDates({ startDate: selectedDate, endDate: null });
   };
 
-  const selectDate = (date: Date) => {
-    setCheckInAndOut((prevState) => {
-      if (prevState.checkIn && prevState.checkOut) {
-        return { checkIn: date, checkOut: null };
-      } else if (prevState.checkIn && !prevState.checkOut) {
-        if (prevState.checkIn.getTime() > date.getTime()) {
-          return { checkIn: date, checkOut: null };
-        }
-        if (prevState.checkIn.getTime() === date.getTime()) {
-          return prevState;
-        }
-        return { ...prevState, checkOut: date };
-      }
-      return prevState;
+  const checkCurrentCalendarPosition = () => {
+    setHasCalendarReachedEnd({
+      left: windowRef.current?.scrollLeft === 0,
+      right: windowRef.current
+        ? windowRef.current.scrollLeft >= WHOLE_CALENDAR_WIDTH.current - WINDOW_WIDTH.current
+        : false,
     });
   };
 
-  const checkSelected = (date: Date) => {
-    const inputValue = date.getTime();
-    const checkIn = checkInAndOut.checkIn.getTime();
-    const checkOut = checkInAndOut.checkOut?.getTime();
-    if (isAlonePoint({ inputValue, checkIn, checkOut })) return 'alonePoint';
-    if (isStartPoint({ inputValue, checkIn })) return 'startPoint';
-    if (isEndPoint({ inputValue, checkOut })) return 'endPotint';
-    if (isBetweenPoint({ inputValue, checkIn, checkOut })) return 'betweenPoint';
-  };
-
-  const changeMonth = (todo: 'prev' | 'next') => {
-    setSelectedDate((prevState) => {
-      const prevDate = new Date(prevState);
-      if (todo === 'prev') {
-        prevDate.setMonth(prevDate.getMonth() - 1);
-      } else {
-        prevDate.setMonth(prevDate.getMonth() + 1);
-      }
-      return prevDate;
-    });
+  const slideCalendar = (direction: 'left' | 'right') => {
+    if (direction === 'left') windowRef.current?.scrollTo(windowRef.current?.scrollLeft - WINDOW_WIDTH.current, 0);
+    else if (direction === 'right')
+      windowRef.current?.scrollTo(windowRef.current?.scrollLeft + WINDOW_WIDTH.current, 0);
+    checkCurrentCalendarPosition();
   };
 
   useEffect(() => {
-    setMonthDate(getMonthDate(selectedDate));
-  }, [selectedDate]);
+    if (selectedDates.startDate && selectedDates.endDate)
+      setCheckInAndOut({ checkIn: selectedDates.startDate, checkOut: selectedDates.endDate });
+  }, [selectedDates]);
 
+  useEffect(() => {
+    WINDOW_WIDTH.current = windowRef.current?.clientWidth || 0;
+    WHOLE_CALENDAR_WIDTH.current = monthsWrapperRef.current?.clientWidth || 0;
+    checkCurrentCalendarPosition();
+  }, []);
+
+  // useEffect(() => {
+
+  // }, [hasCalendarReachedEnd]);
   return (
     <Container>
-      <DatepickerPrinter onClick={openDatepicker}>
-        <Icon />
-        <CheckIn>
-          <span>체크인</span>
-          <span>{checkInAndOut.checkIn.toLocaleDateString()}</span>
-        </CheckIn>
-        <CheckOut>
-          <span>체크아웃</span>
-          <span>{checkInAndOut.checkOut?.toLocaleDateString() || ''}</span>
-        </CheckOut>
-        <Sum>
-          {getDayGap(checkInAndOut.checkIn, checkInAndOut.checkOut)}박
-          {getDayGap(checkInAndOut.checkIn, checkInAndOut.checkOut) + 1}일
-        </Sum>
-      </DatepickerPrinter>
-      {isOpen && (
-        <>
-          <DatepickerWrapper>
-            <Navigation>
-              <ButtonPrev type="button" onClick={() => changeMonth('prev')} />
-              <span>
-                {selectedDate.toLocaleDateString()}
-                <TodayButton onClick={() => setSelectedDate(today)}>오늘날짜로</TodayButton>
-              </span>
-              <ButtonNext type="button" onClick={() => changeMonth('next')} />
-            </Navigation>
-            <Calendar>
-              <Days>
-                {['일', '월', '화', '수', '목', '금', '토'].map((day, idx) => (
-                  <Day key={idx} color={giveColor(idx) || theme.fontLightColor}>
-                    {day}
-                  </Day>
-                ))}
-              </Days>
-              <Dates>
-                {monthDate.map((date, idx) => (
-                  <NumberDay
-                    key={idx}
-                    onClick={() => selectDate(date)}
-                    color={giveColor(date.getDay())}
-                    isBlur={date.getMonth() !== selectedDate.getMonth()}
-                    hasPointer
-                    isSelect={checkSelected(date)}
-                    isToday={isSameDate(today, date)}
-                    isPastDate={isPastDate(today, date)}
-                  >
-                    <span>{date.getDate()}</span>
-                  </NumberDay>
-                ))}
-              </Dates>
-            </Calendar>
-          </DatepickerWrapper>
-          <ModalBackground onClick={closeDatepicker} />
-        </>
+      {!hasCalendarReachedEnd.left && (
+        <ArrowLeftWrapper className="wrapper">
+          <IoIosArrowDropleft onClick={() => slideCalendar('left')} />
+        </ArrowLeftWrapper>
       )}
+      {!hasCalendarReachedEnd.right && (
+        <ArrowRightWrapper className="wrapper">
+          <IoIosArrowDropright onClick={() => slideCalendar('right')} />
+        </ArrowRightWrapper>
+      )}
+      <Window ref={windowRef} className="WINDOW">
+        <MonthsWrapper ref={monthsWrapperRef}>
+          {new Array(12).fill(0).map((_, index) => {
+            const month = addMonths(today, index);
+            const startDateOfCalendar = previousSunday(startOfMonth(month));
+            const endDateOfCalendar = nextSunday(endOfMonth(month));
+            return (
+              <MonthContainer key={index + 1}>
+                <MonthText>
+                  {getYear(month)}년 {getMonth(month) + 1}월
+                </MonthText>
+                <DaysContainer>
+                  <DayItem>일</DayItem>
+                  <DayItem>월</DayItem>
+                  <DayItem>화</DayItem>
+                  <DayItem>수</DayItem>
+                  <DayItem>목</DayItem>
+                  <DayItem>금</DayItem>
+                  <DayItem>토</DayItem>
+                </DaysContainer>
+                <DatesContainer>
+                  {new Array(differenceInCalendarDays(endDateOfCalendar, startDateOfCalendar))
+                    .fill(0)
+                    .map((_, index) => {
+                      const date = addDays(startDateOfCalendar, index);
+                      return isSameMonth(date, month) ? (
+                        <DateItem
+                          key={formatISO(date)}
+                          selectedAsStart={selectedDates.startDate ? isSameDay(selectedDates.startDate, date) : false}
+                          selectedAsEnd={selectedDates.endDate ? isSameDay(selectedDates.endDate, date) : false}
+                          selectedAsBetween={
+                            selectedDates.startDate && selectedDates.endDate
+                              ? areIntervalsOverlapping(
+                                  { start: addDays(selectedDates.startDate, 1), end: selectedDates.endDate },
+                                  { start: date, end: addDays(date, 1) },
+                                )
+                              : false
+                          }
+                          endDateSelected={!!selectedDates.endDate}
+                          startDateSelected={!!selectedDates.startDate}
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            handleDateSelection(date);
+                          }}
+                        >
+                          <DateTextWrapper>{getDate(date)}</DateTextWrapper>
+                          {isSameDay(today, date) && <Dot>.</Dot>}
+                        </DateItem>
+                      ) : (
+                        <DateItem></DateItem>
+                      );
+                    })}
+                </DatesContainer>
+              </MonthContainer>
+            );
+          })}
+        </MonthsWrapper>
+      </Window>
     </Container>
   );
 }
-
-const DatepickerPrinter = styled(Printer)`
-  min-width: 400px;
-  max-width: 480px;
-  gap: 0;
-`;
-const Icon = styled.div`
-  width: 2.2rem;
-  height: 2.2rem;
-  margin-right: 1rem;
-  background: rgba(0, 0, 0, 0)
-    url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMCIgaGVpZ2h0PSIzMCIgdmlld0JveD0iMCAwIDMwIDMwIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGZpbGw9IiMwMDAiIGZpbGwtcnVsZT0ibm9uemVybyIgZD0iTTcuNSA1djIuNjU2SDV2MTUuOTM4aDIwVjcuNjU2aC0yLjVWNWg1djIxLjI1aC0yNVY1aDV6bTEwIDIuNjU2aC01VjVoNXYyLjY1NnoiLz48cGF0aCBmaWxsPSIjMjIyIiBmaWxsLXJ1bGU9Im5vbnplcm8iIGQ9Ik05Ljg4NyAxNi4zMThjLjQ0MyAwIC43NzMuMzYzLjc5Mi43OTQuMDE4LjQyOC0uMzc4Ljc5My0uNzkyLjc5M0g3LjcyMmMtLjQ0NCAwLS43NzQtLjM2NS0uNzkyLS43OTMtLjAxOS0uNDI5LjM3Ny0uNzk0Ljc5Mi0uNzk0aDIuMTY1em02LjI1IDBjLjQ0MyAwIC43NzMuMzYzLjc5Mi43OTQuMDE4LjQyOC0uMzc4Ljc5My0uNzkyLjc5M2gtMi4xNjVjLS40NDQgMC0uNzc0LS4zNjUtLjc5Mi0uNzkzLS4wMTktLjQyOS4zNzctLjc5NC43OTItLjc5NGgyLjE2NXptLTYuMjUtNS4wNjhjLjQ0MyAwIC43NzMuMzYyLjc5Mi43OTMuMDE4LjQyOC0uMzc4Ljc5My0uNzkyLjc5M0g3LjcyMmMtLjQ0NCAwLS43NzQtLjM2NS0uNzkyLS43OTMtLjAxOS0uNDI4LjM3Ny0uNzkzLjc5Mi0uNzkzaDIuMTY1em02LjI1IDBjLjQ0MyAwIC43NzMuMzYyLjc5Mi43OTMuMDE4LjQyOC0uMzc4Ljc5My0uNzkyLjc5M2gtMi4xNjVjLS40NDQgMC0uNzc0LS4zNjUtLjc5Mi0uNzkzLS4wMTktLjQyOC4zNzctLjc5My43OTItLjc5M2gyLjE2NXptNi4yNSAwYy40NDMgMCAuNzczLjM2Mi43OTIuNzkzLjAxOC40MjgtLjM3OC43OTMtLjc5Mi43OTNoLTIuMTY1Yy0uNDQ0IDAtLjc3NC0uMzY1LS43OTItLjc5My0uMDE5LS40MjguMzc3LS43OTMuNzkyLS43OTNoMi4xNjV6Ii8+PHJlY3Qgd2lkdGg9IjIuNSIgaGVpZ2h0PSI2LjI1IiB4PSI4Ljc1IiB5PSIyLjUiIGZpbGw9IiMwMDAiIHJ4PSIxIi8+PHJlY3Qgd2lkdGg9IjIuNSIgaGVpZ2h0PSI2LjI1IiB4PSIxOC43NSIgeT0iMi41IiBmaWxsPSIjMDAwIiByeD0iMSIvPjwvZz48L3N2Zz4=')
-    no-repeat scroll center center / contain;
-`;
-const CheckIn = styled.div`
-  width: calc(38% - (2.2rem / 3));
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 0.8rem 0;
-  height: 100%;
-  span:first-child {
-    color: ${theme.fontLightColor};
-    font-size: 0.8rem;
-    font-weight: 300;
-  }
-  span:last-child {
-    color: ${theme.fontDarkColor};
-    font-size: 1rem;
-    font-weight: 600;
-  }
-`;
-const CheckOut = styled(CheckIn)``;
-const Sum = styled.span`
-  width: calc(24% - (2.2rem / 3));
-  color: ${theme.fontDarkColor};
-  font-size: 1rem;
-  font-weight: 600;
-  text-align: center;
-`;
-
-const DatepickerWrapper = styled(Selecter)`
-  width: 480px;
-`;
-const Navigation = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  span {
-    position: relative;
-    cursor: default;
-  }
-`;
-const Calendar = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-const Button = styled.button`
-  cursor: pointer;
-  background-color: transparent;
-  border: none;
-  :hover {
-    background-color: ${theme.onHoverBackgroundColor};
-  }
-`;
-const ButtonNext = styled(Button)`
-  width: 24px;
-  height: 24px;
-  border-radius: 24px;
-  background: rgba(0, 0, 0, 0)
-    url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBmaWxsPSIjMjIyIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0xNS43NDggMTIuNTk0bC01LjI4IDUuMTZhLjg3NC44NzQgMCAwMS0xLjIxNiAwIC44MjcuODI3IDAgMDEwLTEuMTg5TDEzLjkyNCAxMiA5LjI1MiA3LjQzNWEuODI3LjgyNyAwIDAxMC0xLjE4OS44NzQuODc0IDAgMDExLjIxNiAwbDUuMjggNS4xNmEuODI3LjgyNyAwIDAxMCAxLjE4OHoiLz48L3N2Zz4=')
-    no-repeat scroll 0% 0%;
-`;
-
-const ButtonPrev = styled(ButtonNext)`
-  transform: rotate(180deg);
-`;
-const TodayButton = styled(Button)`
+const Container = styled.div`
+  z-index: 100;
   position: absolute;
-  left: 5.5rem;
-  padding: 0.2rem 1rem;
-  border-radius: 4px;
+  top: calc(60px + 1.25rem);
+  left: calc((100% - 810px) / 2);
+  width: 810px;
+  background-color: rgb(255, 255, 255);
+  border: ${theme.borderColor};
+  box-shadow: 1px 3px 10px 0px rgba(0, 0, 0, 0.5);
+  @media (max-width: 480px) {
+    flex-direction: column;
+    width: 100%;
+    padding: 5%;
+    overflow: auto;
+  }
 `;
-const Days = styled.div`
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  row-gap: 1rem;
-  margin-bottom: 0.4rem; ;
+const ArrowLeftWrapper = styled.div`
+  position: absolute;
+  left: 2rem;
+  top: 1rem;
+  width: 1rem;
+  height: 1rem;
 `;
-const Dates = styled(Days)``;
+const ArrowRightWrapper = styled.div`
+  position: absolute;
+  right: 2rem;
+  top: 1rem;
+  width: 1rem;
+  height: 1rem;
+`;
 
-const Day = styled.div<DayProps>`
+const Window = styled.div`
+  width: 100%;
+  overflow: hidden;
+`;
+const MonthsWrapper = styled.div`
+  width: fit-content;
+  display: flex;
+  flex-direction: row;
+`;
+const MonthContainer = styled.div`
+  padding: 2rem;
+  width: 405px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  @media (max-width: 480px) {
+    padding: 0;
+    margin: 1rem auto;
+    width: 100%;
+  }
+`;
+const MonthText = styled.div`
+  font-size: 1.2rem;
+  text-align: center;
+  width: 100%;
+  margin-bottom: 1rem;
+`;
+
+const DaysContainer = styled.div`
+  width: 100%;
+  display: flex;
+`;
+const DayItem = styled.div`
+  color: ${theme.fontLightColor};
+  height: 23px;
+  width: calc(100% / 7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+const DatesContainer = styled.div`
+  height: 240px;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+`;
+
+const DateItem = styled.div<DateItemPropsType>`
+  height: 40px;
+  width: calc(100% / 7);
   position: relative;
   display: flex;
-  align-items: center;
+  flex-direction: column;
   justify-content: center;
-  ${(props) => props.color && `color:${props.color}`};
-  span {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 2.4rem;
-    font-size: 1.2rem;
-    aspect-ratio: 1;
+  align-items: center;
+  color: ${(props) =>
+    props.selectedAsStart || props.selectedAsEnd || props.selectedAsBetween
+      ? 'rgb(255, 255, 255)'
+      : theme.fontDarkColor};
+
+  background-color: ${(props) =>
+    !props.selectedAsStart && !props.selectedAsEnd && props.selectedAsBetween && theme.secondaryColor};
+
+  ${(props) =>
+    (props.selectedAsStart &&
+      props.endDateSelected &&
+      `background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0) 49%, ${theme.secondaryColor} 50%, ${theme.secondaryColor} 100%);`) ||
+    (props.selectedAsEnd &&
+      props.startDateSelected &&
+      `background: linear-gradient(90deg, ${theme.secondaryColor} 0% ,  ${theme.secondaryColor} 49%, rgba(255,255,255,0) 50%, rgba(255,255,255,0) 100%);`)};
+
+  > div:first-child {
+    background-color: ${(props) => (props.selectedAsStart || props.selectedAsEnd) && theme.primaryColor};
+  }
+`;
+const DateTextWrapper = styled.div`
+  cursor: pointer;
+  border-radius: 50%;
+  width: 40px;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  &:hover {
+    border: 2px solid ${theme.primaryColor};
+    border-radius: 50%;
   }
 `;
 
-const NumberDay = styled(Day)<DayProps>`
-  ${(props) => props.isBlur && 'opacity:0.2'};
-  ${(props) => (props.hasPointer ? 'cursor: pointer' : 'pointer-events: none')};
-  ${(props) => props.isSelect === 'betweenPoint' && `background:${theme.secondaryColor}`};
-  ${(props) =>
-    props.isSelect === 'startPoint' &&
-    `background: linear-gradient(to right, white,white, ${theme.secondaryColor}, ${theme.secondaryColor})`};
-  ${(props) =>
-    props.isSelect === 'endPotint' &&
-    `background: linear-gradient(to left, white,white, ${theme.secondaryColor}, ${theme.secondaryColor})`};
-  ${(props) => props.isPastDate && 'pointer-events: none; background-color:rgba(0,0,0,0.3); opacity:0.2;'};
-  :after {
-    ${(props) =>
-      props.isToday &&
-      `content: ' ';
-      border: 2px solid ${isStartOrEndPoint(props.isSelect) ? 'white' : theme.primaryColor};
-      border-radius: 100%;
-      position: absolute;
-      bottom: 0.2rem;`};
-  }
-  span {
-    ${(props) =>
-      isStartOrEndPoint(props.isSelect) && `color:white; background: ${theme.primaryColor}; border-radius:100%`};
-  }
+const Dot = styled.div`
+  color: ${theme.primaryColor};
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  font-weight: bold;
+  top: 50%;
 `;

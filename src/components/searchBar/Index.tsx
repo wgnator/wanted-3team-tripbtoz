@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import SearchIcon from '../../assets/search';
 import { theme } from '../../styles/theme';
-import Datepicker from './Datepicker';
+import DateSelection from './DateSelection';
 import InputSearch from './InputSearch';
 import OptionSelector from './OptionSelector';
 
@@ -10,7 +10,7 @@ export default function SearchBar() {
     <Container>
       <Wrapper>
         <InputSearch />
-        <Datepicker />
+        <DateSelection />
         <OptionSelector />
         <Button>
           <SearchIcon />
@@ -24,6 +24,7 @@ const Container = styled.div`
   padding: 1rem 0;
   border-bottom: 1px solid ${theme.borderColor};
   width: 100%;
+  position: relative;
 `;
 const Wrapper = styled.div`
   max-width: 976px;
