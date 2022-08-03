@@ -1,4 +1,4 @@
-import { DaySelectTypes } from '../Datepicker';
+import { DaySelectTypes } from '../DateSelection';
 
 export const getToday = () => {
   const today = new Date();
