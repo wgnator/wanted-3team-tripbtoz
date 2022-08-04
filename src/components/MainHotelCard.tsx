@@ -3,42 +3,34 @@ import styled from "styled-components";
 import { Hotel } from "../interfaces/types";
 interface props {
   hotel:Hotel,
+  targetRef:any|undefined
 }
-export default function MainHotelCard({hotel}:props) {
+export default function MainHotelCard({hotel,targetRef}:props) {
   // const [loaded, setLoaded] = React.useState(true);
   const {hotel_name,occupancy} = hotel;
+  const hotel1 = hotel_name.split(" ")[0].length;
   const score = ["1","1","1","1","0.5"]
-  const random = Number(Math.random().toFixed(1)) * 10;
-  // React.useEffect(()=>{
-  //   setTimeout(()=>{
-  //     setLoaded(false)
-  //   },300)
-  // },[])
-  // if(loaded){
-  //   return <div></div>
-  // }
+  
   return (
-    <Container >
+    <Container ref={targetRef}>
       <ImgWrap>
-        <img src={`src/images/hotel0.png`} />
+        <img src={`src/images/hotel${hotel1 < 11 ? hotel1 : 10}.png`} />
       </ImgWrap>
       <ContentWrap>
         <HotelRating>5.0성급</HotelRating>
         <HotelName>{hotel_name}</HotelName>
         <HotelAddress>주소지 불명</HotelAddress>
         <HotelValue>
-          {/* <img src="src/images/tripadvisor.png"/> */}
-          {/* <span /> */}
           <i></i>
           <ValueScore>
             {score.map((score:string,index:number)=>{
               return <div key={"score"+index}></div>
             })}
           </ValueScore>
-          <ValueReview>총 111건의 리뷰</ValueReview>
+          <ValueReview>총 {hotel1 * 123}건의 리뷰</ValueReview>
         </HotelValue>
         <HotelPrice>
-          <p>100,000 원</p>
+          <p>{(hotel1 * 43210).toLocaleString('ko-KR')} 원</p>
         </HotelPrice>
         <HotelNotPrice>세금 및 수수료 불포함</HotelNotPrice>
       </ContentWrap>
@@ -50,6 +42,7 @@ export default function MainHotelCard({hotel}:props) {
 const Container = styled.li`
   position: relative;
   transition: all 0.3s ease;
+  width: 100%;
   margin: 1rem auto;
   cursor: pointer;
   @media print, screen and (min-width: 1024px){

@@ -19,7 +19,7 @@ export default function useHotels() {
         Object.keys(value).includes('numberOfGuests'),
     );
 
-  function getResultsByPage(searchParameter: UserDataType | null, page: number = 1) {
+  function getResultsByPage(page: number = 1,searchParameter?: UserDataType | null) {
     setIsLoading(true);
     if (page === 1) {
       const searchQueryString = searchParameter ? getSearchQueryString(searchParameter, userHotels) : '';
