@@ -1,21 +1,23 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import CardSkeleton from '../components/CardSkeleton';
 import MainHotelCard from '../components/MainHotelCard';
 import useHotels from '../hooks/useHotels';
+import { Hotel } from '../interfaces/types';
 
 export default function MainPage() {
+  const navigate = useNavigate();
   const [viewTarget, setVeiwTarget] = React.useState<Element | null>(null);
-  const pageRef = React.useRef(0);
+  const pageRef = React.useRef<number | null>(null);
   const { isLoading, hotels, getResultsByPage } = useHotels();
-
+  const clcikHotel = (hotelName: string) => {
+    navigate(`details/${hotelName}`);
+  };
   const fetchData = () => {
-    pageRef.current = pageRef.current + 1;
+    pageRef.current = pageRef.current === null ? 0 : pageRef.current + 1;
     getResultsByPage(pageRef.current);
   };
-
-  React.useEffect(() => {
-    fetchData();
-  }, []);
 
   const observerCallback = (entries: any) => {
     const [entry] = entries;
@@ -24,29 +26,32 @@ export default function MainPage() {
   const options = {
     root: null,
     rootMargin: '0px',
-    threshold: 1,
+    threshold: 0.5,
   };
 
   React.useEffect(() => {
     const observer = new IntersectionObserver(observerCallback, options);
 
     if (viewTarget) observer.observe(viewTarget);
-
-    return () => {
-      if (viewTarget) observer.unobserve(viewTarget);
-    };
   }, [viewTarget]);
-  React.useEffect(() => {
-    // console.log(hotels);
-    console.log(isLoading);
-  }, [isLoading]);
+
   return (
     <Container id="컨테이너">
       <HotelCards>
-        {hotels.map((hotel, index) => {
-          const lastIndex = index === hotels.length - 1;
-          return <MainHotelCard key={'hotel' + index} hotel={hotel} targetRef={lastIndex ? setVeiwTarget : null} />;
-        })}
+        {isLoading
+          ? new Array(10).fill(1).map((i) => {
+              return <CardSkeleton />;
+            })
+          : hotels.map((hotel: Hotel, index: number) => {
+              const lastIndex = index === hotels.length - 1;
+              return (
+                <MainHotelCard
+                  key={hotel.hotel_name + index}
+                  hotel={hotel}
+                  targetRef={lastIndex ? setVeiwTarget : null}
+                />
+              );
+            })}
       </HotelCards>
     </Container>
   );
@@ -60,4 +65,5 @@ const Container = styled.div`
 const HotelCards = styled.ul`
   display: flex;
   flex-direction: column;
+  margin: 0 auto;
 `;

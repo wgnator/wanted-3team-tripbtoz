@@ -54,12 +54,11 @@ export default function InputSearch({}: InputSearchProps) {
 }
 
 const InputSearchWrapper = styled.label`
-  height: 100%;
+  height: 3rem;
   width: 100%;
   display: flex;
   align-items: center;
   padding: 0.625rem;
-  border-right: 1px solid ${theme.borderColor};
   svg:first-child {
     width: 1.8rem;
     height: 1.8rem;
@@ -71,6 +70,10 @@ const InputSearchWrapper = styled.label`
   }
   :hover {
     background-color: ${theme.onHoverBackgroundColor};
+  }
+  @media (min-width: 970px) {
+    height: 100%;
+    border-right: 1px solid ${theme.borderColor};
   }
 `;
 const SearchInput = styled.input`

@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 import { useAppDispatch } from '../../hooks/reduxHooks';
 import { setQuery } from '../../reducers/searchQueryReducer';
 import { theme } from '../../styles/theme';
+<<<<<<< HEAD
 import { convertToDateString } from '../../utils/utils';
 import DatePicker from './DatePicker';
 import { Container, ModalBackground, Printer, Selecter } from './OptionSelector';
@@ -18,6 +19,11 @@ import {
   isStartOrEndPoint,
   isStartPoint,
 } from './services/datepickerService';
+=======
+import DatePicker from './Datepicker';
+import { Container, ModalBackground, Printer } from './OptionSelector';
+import { getDayGap, getToday } from './services/datepickerService';
+>>>>>>> 80372c955d623f863a1172594cc353c3af20c342
 
 interface DateSelectionProps {}
 export interface CheckInAndOut {

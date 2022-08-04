@@ -187,6 +187,7 @@ const Container = styled.div`
   border: ${theme.borderColor};
   box-shadow: 1px 3px 10px 0px rgba(0, 0, 0, 0.5);
   @media (max-width: 480px) {
+    top: 7rem;
     width: 100%;
     padding: 5%;
     left: 0;

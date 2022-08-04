@@ -3,22 +3,21 @@ import { useState, useEffect } from 'react';
 import { hotelsService } from '../api/axiosInstance';
 import { Hotel, UserDataType } from '../interfaces/types';
 import { getSearchQueryString } from '../utils/getQueryString';
+import { getLocalStorage } from '../utils/storage';
 
 export default function useHotels() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [hotels, setHotels] = useState<Hotel[]>([]);
   const [searchQueryString, setSearchQueryString] = useState<string>('');
-  const [hotelInfo, setHotelInfo] = useState({});
+  const [hotelInfo, setHotelInfo] = useState<Hotel>({
+    hotel_name: '',
+    occupancy: {
+      base: 0,
+      max: 0,
+    },
+  });
 
-  const userHotels = Object.values(window.localStorage)
-    .map((value) => JSON.parse(value))
-    .filter(
-      (value) =>
-        Object.keys(value).includes('hotelName') &&
-        Object.keys(value).includes('checkInDate') &&
-        Object.keys(value).includes('checkOutDate') &&
-        Object.keys(value).includes('numberOfGuests'),
-    );
+  const userHotels = getLocalStorage('userHotels', []);
 
   function getResultsByPage(page: number = 1, searchParameter?: UserDataType | null) {
     setIsLoading(true);
@@ -43,7 +42,7 @@ export default function useHotels() {
     setIsLoading(true);
     setTimeout(async () => {
       const data = await hotelsService.get(`?hotel_name=${hotelName}`);
-      setHotelInfo(data);
+      setHotelInfo({ ...data[0] });
       setIsLoading(false);
     }, 500);
   }
