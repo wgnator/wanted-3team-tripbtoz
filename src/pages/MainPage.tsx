@@ -44,7 +44,6 @@ import useHotels from "../hooks/useHotels";
   return (
     <Container id="컨테이너">
       <HotelCards >
-        <ClipLoader color="black" loading={isLoading} size={100}/>
         {hotels.map((hotel,index)=>{
           const lastIndex = index === hotels.length-1;
           return (<MainHotelCard key={"hotel"+index} hotel={hotel} targetRef={lastIndex ? setVeiwTarget : null} />)
