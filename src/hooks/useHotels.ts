@@ -9,7 +9,13 @@ export default function useHotels() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [hotels, setHotels] = useState<Hotel[]>([]);
   const [searchQueryString, setSearchQueryString] = useState<string>('');
-  const [hotelInfo, setHotelInfo] = useState({});
+  const [hotelInfo, setHotelInfo] = useState<Hotel>({
+    hotel_name: '',
+    occupancy: {
+      base: 0,
+      max: 0,
+    },
+  });
 
   const userHotels = getLocalStorage('userHotels', []);
 
@@ -36,7 +42,7 @@ export default function useHotels() {
     setIsLoading(true);
     setTimeout(async () => {
       const data = await hotelsService.get(`?hotel_name=${hotelName}`);
-      setHotelInfo(data);
+      setHotelInfo({ ...data[0] });
       setIsLoading(false);
     }, 500);
   }
