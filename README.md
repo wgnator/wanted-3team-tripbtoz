@@ -6,7 +6,7 @@
 
 **호텔 목록**와 관련된 기능
 
-- 훅을 실행하면 { isLoading, hotels, userHotels, getResultsByPage } 4개 값을 가진 객체를 반환합니다.
+- 훅을 실행하면 { isLoading, hotels, userHotels, hotelInfo, getResultsByPage, getHotelInfo } 6개 값을 가진 객체를 반환합니다.
 
 - import할 때 전체 데이터중 첫번째 페이지의 데이터(10개)를 초기값으로 불러옵니다.
 
@@ -16,11 +16,15 @@
 
 - userHotels는 예약한(로컬스토리지에 저장된) 호텔목록입니다.
 
+- hotelInfo는 호텔상세정보입니다.
+
 - getResultsByPage에 `(searchParameter: UserDataType | null, page: number = 1)` 를 주고 실행하면 검색조건에 맞는 새로운데이터를 페이지당 10개씩 요청합니다.
+
+- getHotelInfo에 `(hotelName: string)`을 주고 실행하면 호텔상세정보를 요청합니다.
 
 - 페이지 요청시 대기시간은 500ms 입니다.
 
-- 검색 결과가 아닌 전체데이터를 요청하려면 getResultsByPage 함수의 첫번째 인자에 null을 주고 실행합니다.
+- 검색 결과가 아닌 전체데이터를 요청하려면 getResultsByPage 함수의 `searchParameter` 인자에 null을 주고 실행합니다.
 
 ```ts
 interface UserDataType {
