@@ -8,6 +8,7 @@ export default function useHotels() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [hotels, setHotels] = useState<Hotel[]>([]);
   const [searchQueryString, setSearchQueryString] = useState<string>('');
+  const [hotelInfo, setHotelInfo] = useState({});
 
   const userHotels = Object.values(window.localStorage)
     .map((value) => JSON.parse(value))
@@ -19,7 +20,7 @@ export default function useHotels() {
         Object.keys(value).includes('numberOfGuests'),
     );
 
-  function getResultsByPage(page: number = 1,searchParameter?: UserDataType | null) {
+  function getResultsByPage(page: number = 1, searchParameter?: UserDataType | null) {
     setIsLoading(true);
     if (page === 1) {
       const searchQueryString = searchParameter ? getSearchQueryString(searchParameter, userHotels) : '';
@@ -38,9 +39,18 @@ export default function useHotels() {
     }
   }
 
+  function getHotelInfo(hotelName: string) {
+    setIsLoading(true);
+    setTimeout(async () => {
+      const data = await hotelsService.get(`?hotel_name=${hotelName}`);
+      setHotelInfo(data);
+      setIsLoading(false);
+    }, 500);
+  }
+
   useEffect(() => {
-    getResultsByPage(null);
+    getResultsByPage(1, null);
   }, []);
 
-  return { isLoading, hotels, userHotels, getResultsByPage };
+  return { isLoading, hotels, userHotels, hotelInfo, getResultsByPage, getHotelInfo };
 }
