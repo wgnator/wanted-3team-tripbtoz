@@ -1,4 +1,4 @@
-import { DaySelectTypes } from '../DateSelection';
+import { DaySelectTypes } from '../DateSelection';
 
 export const getToday = () => {
   const today = new Date();

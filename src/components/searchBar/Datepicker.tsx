@@ -2,13 +2,16 @@ import {
   addDays,
   areIntervalsOverlapping,
   differenceInCalendarDays,
+  endOfDay,
   endOfMonth,
   formatISO,
   getDate,
   getMonth,
   getYear,
+  isPast,
   isSameDay,
   isSameMonth,
+  isSunday,
   nextSunday,
   previousSunday,
   startOfMonth,
@@ -18,38 +21,46 @@ import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { theme } from '../../styles/theme';
 import { IoIosArrowDropleft, IoIosArrowDropright } from 'react-icons/io';
-import { CheckInAndOut } from './DateSelection';
+import { CheckInAndOut } from './DateSelection';
+
 type DateItemPropsType = {
-  selectedAsStart?: boolean;
-  selectedAsEnd?: boolean;
-  selectedAsBetween?: boolean;
+  isPast?: boolean;
+  selectedAs?: 'start' | 'end' | 'between' | null;
   endDateSelected?: boolean;
   startDateSelected?: boolean;
   isToday?: boolean;
 };
-
 type SelectedDatesType = {
   startDate: Date | null;
   endDate: Date | null;
 };
+type CalendarReachedEndStatusType = {
+  left: boolean;
+  right: boolean;
+};
+type CalendarDirectionsType = 'left' | 'right';
 type DatePickerProps = {
+  initialDates: CheckInAndOut;
   setCheckInAndOut: Dispatch<SetStateAction<CheckInAndOut>>;
 };
-export default function DatePicker({ setCheckInAndOut }: DatePickerProps) {
-  const today = new Date();
-  const [selectedDates, setSelectedDates] = useState<SelectedDatesType>({
-    startDate: addDays(today, 7),
-    endDate: addDays(today, 8),
-  });
-  const windowRef = useRef<HTMLDivElement>(null);
-  const monthsWrapperRef = useRef<HTMLDivElement>(null);
 
-  const WINDOW_WIDTH = useRef<number>(0);
-  const WHOLE_CALENDAR_WIDTH = useRef<number>(0);
-  const [hasCalendarReachedEnd, setHasCalendarReachedEnd] = useState({
+export default function DatePicker({ initialDates, setCheckInAndOut }: DatePickerProps) {
+  const today = new Date();
+
+  const [selectedDates, setSelectedDates] = useState<SelectedDatesType>({
+    startDate: initialDates.checkIn,
+    endDate: initialDates.checkOut,
+  });
+  const [hasCalendarReachedEnd, setHasCalendarReachedEnd] = useState<CalendarReachedEndStatusType>({
     left: true,
     right: false,
   });
+
+  const windowRef = useRef<HTMLDivElement>(null);
+  const monthsWrapperRef = useRef<HTMLDivElement>(null);
+  const WINDOW_WIDTH = useRef<number>(0);
+  const WHOLE_CALENDAR_WIDTH = useRef<number>(0);
+
   const handleDateSelection = (selectedDate: Date) => {
     if (selectedDates.startDate === null || (selectedDates.startDate && selectedDates.endDate))
       setSelectedDates({ startDate: selectedDate, endDate: null });
@@ -67,13 +78,27 @@ export default function DatePicker({ setCheckInAndOut }: DatePickerProps) {
     });
   };
 
-  const slideCalendar = (direction: 'left' | 'right') => {
+  const slideCalendar = (direction: CalendarDirectionsType) => {
     if (direction === 'left') windowRef.current?.scrollTo(windowRef.current?.scrollLeft - WINDOW_WIDTH.current, 0);
     else if (direction === 'right')
       windowRef.current?.scrollTo(windowRef.current?.scrollLeft + WINDOW_WIDTH.current, 0);
     checkCurrentCalendarPosition();
   };
 
+  const checkIsSelectedAs = (date: Date) => {
+    if (selectedDates.startDate && isSameDay(selectedDates.startDate, date)) return 'start';
+    if (selectedDates.endDate && isSameDay(selectedDates.endDate, date)) return 'end';
+    if (
+      selectedDates.startDate &&
+      selectedDates.endDate &&
+      areIntervalsOverlapping(
+        { start: addDays(selectedDates.startDate, 1), end: selectedDates.endDate },
+        { start: date, end: addDays(date, 1) },
+      )
+    )
+      return 'between';
+    return null;
+  };
   useEffect(() => {
     if (selectedDates.startDate && selectedDates.endDate)
       setCheckInAndOut({ checkIn: selectedDates.startDate, checkOut: selectedDates.endDate });
@@ -85,26 +110,25 @@ export default function DatePicker({ setCheckInAndOut }: DatePickerProps) {
     checkCurrentCalendarPosition();
   }, []);
 
-  // useEffect(() => {
-
-  // }, [hasCalendarReachedEnd]);
   return (
     <Container>
       {!hasCalendarReachedEnd.left && (
-        <ArrowLeftWrapper className="wrapper">
+        <ArrowWrapper direction="left">
           <IoIosArrowDropleft onClick={() => slideCalendar('left')} />
-        </ArrowLeftWrapper>
+        </ArrowWrapper>
       )}
       {!hasCalendarReachedEnd.right && (
-        <ArrowRightWrapper className="wrapper">
+        <ArrowWrapper direction="right">
           <IoIosArrowDropright onClick={() => slideCalendar('right')} />
-        </ArrowRightWrapper>
+        </ArrowWrapper>
       )}
-      <Window ref={windowRef} className="WINDOW">
+      <Window ref={windowRef}>
         <MonthsWrapper ref={monthsWrapperRef}>
           {new Array(12).fill(0).map((_, index) => {
             const month = addMonths(today, index);
-            const startDateOfCalendar = previousSunday(startOfMonth(month));
+            const startDateOfCalendar = isSunday(startOfMonth(month))
+              ? startOfMonth(month)
+              : previousSunday(startOfMonth(month));
             const endDateOfCalendar = nextSunday(endOfMonth(month));
             return (
               <MonthContainer key={index + 1}>
@@ -128,16 +152,8 @@ export default function DatePicker({ setCheckInAndOut }: DatePickerProps) {
                       return isSameMonth(date, month) ? (
                         <DateItem
                           key={formatISO(date)}
-                          selectedAsStart={selectedDates.startDate ? isSameDay(selectedDates.startDate, date) : false}
-                          selectedAsEnd={selectedDates.endDate ? isSameDay(selectedDates.endDate, date) : false}
-                          selectedAsBetween={
-                            selectedDates.startDate && selectedDates.endDate
-                              ? areIntervalsOverlapping(
-                                  { start: addDays(selectedDates.startDate, 1), end: selectedDates.endDate },
-                                  { start: date, end: addDays(date, 1) },
-                                )
-                              : false
-                          }
+                          isPast={isPast(endOfDay(date))}
+                          selectedAs={checkIsSelectedAs(date)}
                           endDateSelected={!!selectedDates.endDate}
                           startDateSelected={!!selectedDates.startDate}
                           onClick={(event) => {
@@ -171,35 +187,42 @@ const Container = styled.div`
   border: ${theme.borderColor};
   box-shadow: 1px 3px 10px 0px rgba(0, 0, 0, 0.5);
   @media (max-width: 480px) {
-    flex-direction: column;
     width: 100%;
     padding: 5%;
-    overflow: auto;
+    left: 0;
   }
 `;
-const ArrowLeftWrapper = styled.div`
+const ArrowWrapper = styled.div<{ direction: 'left' | 'right' }>`
   position: absolute;
-  left: 2rem;
-  top: 1rem;
-  width: 1rem;
-  height: 1rem;
+  top: 1.5rem;
+  ${(props) => (props.direction === 'left' ? `left: 2rem;` : `right: 2rem;`)}
+  * {
+    transform: scale(1.2);
+    transform-origin: center;
+    fill: ${theme.borderColor};
+  }
+  *:first-child {
+    width: 1.2rem;
+    height: 1.2rem;
+  }
+  @media (max-width: 480px) {
+    display: none;
+  }
 `;
-const ArrowRightWrapper = styled.div`
-  position: absolute;
-  right: 2rem;
-  top: 1rem;
-  width: 1rem;
-  height: 1rem;
-`;
-
 const Window = styled.div`
   width: 100%;
   overflow: hidden;
+  @media (max-width: 480px) {
+    overflow: auto;
+  }
 `;
 const MonthsWrapper = styled.div`
   width: fit-content;
   display: flex;
   flex-direction: row;
+  @media (max-width: 480px) {
+    flex-direction: column;
+  }
 `;
 const MonthContainer = styled.div`
   padding: 2rem;
@@ -233,7 +256,7 @@ const DayItem = styled.div`
   align-items: center;
 `;
 const DatesContainer = styled.div`
-  height: 240px;
+  height: 18rem;
   width: 100%;
   display: flex;
   flex-wrap: wrap;
@@ -247,26 +270,25 @@ const DateItem = styled.div<DateItemPropsType>`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  color: ${(props) =>
-    props.selectedAsStart || props.selectedAsEnd || props.selectedAsBetween
-      ? 'rgb(255, 255, 255)'
-      : theme.fontDarkColor};
+  color: ${(props) => (props.selectedAs !== null ? 'rgb(255, 255, 255)' : theme.fontDarkColor)};
+  background-color: ${(props) => props.selectedAs === 'between' && theme.secondaryColor};
 
-  background-color: ${(props) =>
-    !props.selectedAsStart && !props.selectedAsEnd && props.selectedAsBetween && theme.secondaryColor};
-
+  ${(props) => props.isPast && `pointer-events: none; color:${theme.fontLightColor}`}
   ${(props) =>
-    (props.selectedAsStart &&
-      props.endDateSelected &&
-      `background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0) 49%, ${theme.secondaryColor} 50%, ${theme.secondaryColor} 100%);`) ||
-    (props.selectedAsEnd &&
-      props.startDateSelected &&
-      `background: linear-gradient(90deg, ${theme.secondaryColor} 0% ,  ${theme.secondaryColor} 49%, rgba(255,255,255,0) 50%, rgba(255,255,255,0) 100%);`)};
+    props.selectedAs === 'start' &&
+    props.endDateSelected &&
+    `background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0) 49%, ${theme.secondaryColor} 50%, ${theme.secondaryColor} 100%);`}
+  ${(props) =>
+    props.selectedAs === 'end' &&
+    props.startDateSelected &&
+    `background: linear-gradient(90deg, ${theme.secondaryColor} 0% ,  ${theme.secondaryColor} 49%, rgba(255,255,255,0) 50%, rgba(255,255,255,0) 100%);`};
 
   > div:first-child {
-    background-color: ${(props) => (props.selectedAsStart || props.selectedAsEnd) && theme.primaryColor};
+    ${(props) =>
+      (props.selectedAs === 'start' || props.selectedAs === 'end') && `background-color: ${theme.primaryColor}`};
   }
 `;
+
 const DateTextWrapper = styled.div`
   cursor: pointer;
   border-radius: 50%;
@@ -284,6 +306,7 @@ const DateTextWrapper = styled.div`
 const Dot = styled.div`
   color: ${theme.primaryColor};
   position: absolute;
+  z-index: -1;
   width: 100%;
   text-align: center;
   font-weight: bold;

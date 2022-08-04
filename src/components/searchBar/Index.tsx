@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import SearchIcon from '../../assets/search';
 import { theme } from '../../styles/theme';
-import DateSelection from './DateSelection';
+import DateSelection from './DateSelection';
 import InputSearch from './InputSearch';
 import OptionSelector from './OptionSelector';
 

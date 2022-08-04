@@ -57,6 +57,7 @@ const InputSearchWrapper = styled.label`
   }
 `;
 const SearchInput = styled.input`
+  width: 100%;
   white-space: nowrap;
   font-size: 1rem;
   padding: 0 0.625rem;
