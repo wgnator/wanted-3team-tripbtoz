@@ -17,7 +17,7 @@ export default function useHotels() {
   }
 
   async function getResultsByPage(searchParameter: UserDataType, page: number = 1) {
-    setIsLoading(true);
+    // setIsLoading(true);
     const searchString = searchParameter.hotelName?.split(' ').join('+') || '';
     const neQueryString = getExceptedHotelsQueryString(searchParameter.checkInDate, searchParameter.checkOutDate);
     setTimeout(async () => {
@@ -25,7 +25,7 @@ export default function useHotels() {
         `?occupancy.max_gte=${searchParameter.numberOfGuests}&q=${searchString}${neQueryString}&_page=${page}`,
       );
       page === 1 ? setHotels(data) : setHotels([...hotels, ...data]);
-      setIsLoading(false);
+      // setIsLoading(false);
     }, 500);
   }
 
