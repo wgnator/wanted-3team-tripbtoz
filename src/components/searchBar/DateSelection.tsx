@@ -1,20 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 import { theme } from '../../styles/theme';
-import DatePicker from './DatePicker';
-import { Container, ModalBackground, Printer, Selecter } from './OptionSelector';
-import {
-  getDayGap,
-  getMonthDate,
-  getToday,
-  isAlonePoint,
-  isBetweenPoint,
-  isEndPoint,
-  isPastDate,
-  isSameDate,
-  isStartOrEndPoint,
-  isStartPoint,
-} from './services/datepickerService';
+import DatePicker from './Datepicker';
+import { Container, ModalBackground, Printer } from './OptionSelector';
+import { getDayGap, getToday } from './services/datepickerService';
 
 interface DateSelectionProps {}
 export interface CheckInAndOut {
