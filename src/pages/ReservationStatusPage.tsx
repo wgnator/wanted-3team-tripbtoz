@@ -7,6 +7,14 @@ import ReservationHotel from '../components/ReservationStatusPage/ReservationHot
 export default function ReservationStatusPage() {
   const ReservationHotels = getLocalStorage('userHotels', []);
 
+  if (!ReservationHotels.length) {
+    return (
+      <Container>
+        <Content>아직 준비된 예약이 없어요. 함께 새로운 스테이를 찾아봐요.</Content>
+      </Container>
+    );
+  }
+
   return (
     <Container>
       <Content>
