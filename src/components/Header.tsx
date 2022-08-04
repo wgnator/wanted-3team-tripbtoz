@@ -6,7 +6,9 @@ export default function Header() {
   return (
     <Container>
       <Wrapper>
-        <Logo>LOGO</Logo>
+        <Link to="/">
+          <Logo>LOGO</Logo>
+        </Link>
         <Link to="reservation">예약목록</Link>
       </Wrapper>
     </Container>
