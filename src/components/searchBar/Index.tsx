@@ -1,18 +1,23 @@
+import { useState } from 'react';
 import styled from 'styled-components';
 import SearchIcon from '../../assets/search';
+import { useAppDispatch } from '../../hooks/reduxHooks';
+import { determineQuery } from '../../reducers/searchQueryReducer';
 import { theme } from '../../styles/theme';
 import DateSelection from './DateSelection';
 import InputSearch from './InputSearch';
 import OptionSelector from './OptionSelector';
 
 export default function SearchBar() {
+  const dispatch = useAppDispatch();
+
   return (
     <Container>
       <Wrapper>
         <InputSearch />
         <DateSelection />
         <OptionSelector />
-        <Button>
+        <Button onClick={() => dispatch(determineQuery())}>
           <SearchIcon />
         </Button>
       </Wrapper>

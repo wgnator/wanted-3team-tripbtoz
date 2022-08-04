@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { useAppDispatch } from '../../hooks/reduxHooks';
+import { setQuery } from '../../reducers/searchQueryReducer';
 import { theme } from '../../styles/theme';
+import { convertToDateString } from '../../utils/utils';
 import DatePicker from './DatePicker';
 import { Container, ModalBackground, Printer, Selecter } from './OptionSelector';
 import {
@@ -19,7 +22,7 @@ import {
 interface DateSelectionProps {}
 export interface CheckInAndOut {
   checkIn: Date;
-  checkOut: Date | null;
+  checkOut: Date;
 }
 
 export type DaySelectTypes = 'startPoint' | 'endPotint' | 'betweenPoint' | 'alonePoint';
@@ -45,12 +48,23 @@ export default function DateSelection({}: DateSelectionProps) {
 
   const [isOpen, setIsOpen] = useState(false);
 
+  const dispatch = useAppDispatch();
+
   const openDatepicker = () => {
     setIsOpen((state) => !state);
   };
   const closeDatepicker = () => {
     setIsOpen(false);
   };
+
+  useEffect(() => {
+    dispatch(
+      setQuery({
+        checkInDate: convertToDateString(checkInAndOut.checkIn),
+        checkOutDate: convertToDateString(checkInAndOut.checkOut),
+      }),
+    );
+  }, [checkInAndOut]);
 
   return (
     <Container style={{ position: 'inherit' }}>
