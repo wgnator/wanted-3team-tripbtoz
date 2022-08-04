@@ -1,25 +1,53 @@
 import styled from 'styled-components';
 import { theme } from '../styles/theme';
 import { MOBILE_BREAKPOINT, TABLET_BREAKPOINT } from '../constants/constants';
+import { useNavigate, useParams } from 'react-router-dom';
+import useHotels from '../hooks/useHotels';
+import { useEffect } from 'react';
 
 export default function DetailsPage() {
+  const { getHotelInfo, hotelInfo, isLoading } = useHotels();
+  const { hotelName } = useParams();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    hotelName && getHotelInfo(hotelName);
+  }, [hotelName]);
+
+  useEffect(() => {
+    if (isLoading || Object.values(hotelInfo).length) return;
+
+    alert('올바른 접근이 아닙니다!');
+    navigate('/');
+  }, [isLoading, hotelInfo]);
+
+  if (isLoading) {
+    return (
+      <Container>
+        <Content>Loading....</Content>
+      </Container>
+    );
+  }
+
   return (
     <Container>
       <Content>
         <HotelInformation>
-          <HotelImage src="/images/hotel.jpg" alt="hotel" />
+          <HotelImage src="/src/images/hotel0.png" alt="hotel" />
           <HotelIntroduction>
-            <HotelClassification>4.0성급</HotelClassification>
-            <HotelName>호텔</HotelName>
+            <HotelClassification>5.0성급</HotelClassification>
+            <HotelName>{hotelInfo?.hotel_name}</HotelName>
             <HotelAddress>서울시 강남구 테헤란로 415, L7빌딩</HotelAddress>
           </HotelIntroduction>
         </HotelInformation>
         <RoomInformation>
           <RoomTypeContainer>
-            <RoomImage src="/images/room.jpg" alt="hotel" />
+            <RoomImage src="/src/images/hotel1.png" alt="room" />
             <RoomTypeInformation>
               <RoomType>Room</RoomType>
-              <Occupancy>기준 2인 | 최대 2인</Occupancy>
+              <Occupancy>
+                기준 {hotelInfo?.occupancy?.base}인 | 최대 {hotelInfo?.occupancy?.max}인
+              </Occupancy>
             </RoomTypeInformation>
           </RoomTypeContainer>
           <ReservationContainer>
@@ -135,7 +163,7 @@ const RoomImage = styled.img`
 
   @media screen and (max-width: ${MOBILE_BREAKPOINT}px) {
     width: 100%;
-   height: 36.1111vw;;
+    height: 36.1111vw;
   }
 `;
 
@@ -149,8 +177,8 @@ const RoomTypeContainer = styled.div`
   }
 
   @media screen and (max-width: ${MOBILE_BREAKPOINT}px) {
-   display: flex;
-   flex-direction: column-reverse;
+    display: flex;
+    flex-direction: column-reverse;
   }
 `;
 
@@ -196,4 +224,3 @@ const ReservationButton = styled.button`
   margin-top: 0.6rem;
   border-radius: 4px;
 `;
-

@@ -1,3 +1,4 @@
+
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -19,27 +20,20 @@ import { Hotel } from "../interfaces/types";
     getResultsByPage(pageRef.current)
   }
 
-  React.useEffect(()=>{
-    fetchData()
-  },[])
-  
-  const observerCallback = (entries:any) => {
-    const [entry] = entries
-    if(entry.isIntersecting) fetchData()
-  }
+  const observerCallback = (entries: any) => {
+    const [entry] = entries;
+    if (entry.isIntersecting) fetchData();
+  };
   const options = {
     root:null,
     rootMargin:"0px",
     threshold: 0.5,
   };
 
-  React.useEffect(()=>{
+  React.useEffect(() => {
     const observer = new IntersectionObserver(observerCallback, options);
 
-    if (viewTarget) observer.observe(viewTarget)
-    
-    return () => { if (viewTarget) observer.unobserve(viewTarget) }
-
+    if (viewTarget) observer.observe(viewTarget);
   },[viewTarget])
 
   return (
