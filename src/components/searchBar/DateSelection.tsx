@@ -69,7 +69,7 @@ export default function DateSelection({}: DateSelectionProps) {
 }
 
 const DatepickerPrinter = styled(Printer)`
-  min-width: 400px;
+  min-width: 375px;
   max-width: 480px;
   gap: 0;
 `;

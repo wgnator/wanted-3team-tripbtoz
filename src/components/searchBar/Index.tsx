@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import SearchIcon from '../../assets/search';
+import { MOBILE_BREAKPOINT } from '../../constants/constants';
 import { theme } from '../../styles/theme';
 import DateSelection from './DateSelection';
 import InputSearch from './InputSearch';
@@ -27,7 +28,7 @@ const Container = styled.div`
   width: 100%;
   position: relative;
   background-color: white;
-  @media (min-width: 970px) {
+  @media (min-width: ${MOBILE_BREAKPOINT}px) {
     border-bottom: 1px solid ${theme.borderColor};
     box-shadow: 0px 8px 10px 0px rgba(0, 0, 0, 0.1);
   }
@@ -59,7 +60,7 @@ const Wrapper = styled.div`
     border-bottom: 1px solid ${theme.borderColor};
   }
   box-shadow: 0px 8px 10px 0px rgba(0, 0, 0, 0.1);
-  @media (min-width: 970px) {
+  @media (min-width: ${MOBILE_BREAKPOINT}px) {
     display: flex;
     flex-direction: row;
     height: 60px;
@@ -95,7 +96,7 @@ const IconWrapper = styled.div`
   height: 80%;
   border-radius: 4px;
   margin-right: 1rem;
-  @media (min-width: 970px) {
+  @media (min-width: ${MOBILE_BREAKPOINT}px) {
     margin: 0;
     border-radius: 0;
     width: 100%;

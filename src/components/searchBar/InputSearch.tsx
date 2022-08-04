@@ -2,6 +2,7 @@ import { useRef, useState } from 'react';
 import styled from 'styled-components';
 import SearchIcon from '../../assets/search';
 import XIcon from '../../assets/x';
+import { MOBILE_BREAKPOINT } from '../../constants/constants';
 import { theme } from '../../styles/theme';
 
 interface InputSearchProps {}
@@ -54,7 +55,7 @@ const InputSearchWrapper = styled.label`
   :hover {
     background-color: ${theme.onHoverBackgroundColor};
   }
-  @media (min-width: 970px) {
+  @media (min-width: ${MOBILE_BREAKPOINT}px) {
     height: 100%;
     border-right: 1px solid ${theme.borderColor};
   }

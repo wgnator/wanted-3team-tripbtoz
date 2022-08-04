@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useReducer, useState } from 'react';
 import styled from 'styled-components';
 import UserSingle from '../../assets/UserSingle';
+import { MOBILE_BREAKPOINT } from '../../constants/constants';
 import { theme } from '../../styles/theme';
 
 interface OptionSelectorProps {}
@@ -58,7 +59,7 @@ export default function OptionSelector({}: OptionSelectorProps) {
       </Printer>
       {isOpen && (
         <>
-          <Selecter onBlur={closeSelector}>
+          <Selecter>
             <Row>
               <Label>성인</Label>
               <CountWrapper>
@@ -94,7 +95,7 @@ export const Container = styled.div`
   :hover {
     background-color: ${theme.onHoverBackgroundColor};
   }
-  @media (min-width: 970px) {
+  @media (min-width: ${MOBILE_BREAKPOINT}px) {
     height: 100%;
     width: fit-content;
     border-right: 1px solid ${theme.borderColor};
@@ -116,6 +117,7 @@ const Column = styled.div`
   justify-content: center;
 `;
 const Span = styled.span<{ styledColor?: string; thin?: boolean; smallFont?: boolean }>`
+  pointer-events: none;
   ${(props) => props.styledColor && `color:${props.styledColor}`};
   ${(props) => props.thin && `font-weight:300`};
   ${(props) => props.smallFont && `font-size: 0.7rem`};
@@ -142,7 +144,7 @@ export const Selecter = styled.div`
   z-index: 100;
   top: 2.7rem;
   width: 100vw;
-  @media (min-width: 970px) {
+  @media (min-width: ${MOBILE_BREAKPOINT}px) {
     border-radius: 4px;
     min-width: 360px;
     max-width: 480px;

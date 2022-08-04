@@ -8,8 +8,8 @@ export default function Layout() {
 
   return (
     <>
-      {/* <Header /> */}
-      {/* {hasSearchBar && <SearchBar />} */}
+      <Header />
+      {hasSearchBar && <SearchBar />}
       <Outlet />
     </>
   );
