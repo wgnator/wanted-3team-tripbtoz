@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import SearchIcon from '../../assets/search';
 import { theme } from '../../styles/theme';
+import DateSelection from './DateSelection';
 import InputSearch from './InputSearch';
 import OptionSelector from './OptionSelector';
 
@@ -9,7 +10,7 @@ export default function SearchBar() {
     <Container>
       <Wrapper>
         <InputSearch />
-        <Datepicker />
+        <DateSelection />
         <OptionSelector />
         <Button>
           <SearchIcon />
@@ -23,6 +24,7 @@ const Container = styled.div`
   padding: 1rem 0;
   border-bottom: 1px solid ${theme.borderColor};
   width: 100%;
+  position: relative;
 `;
 const Wrapper = styled.div`
   max-width: 976px;
@@ -39,12 +41,6 @@ const Wrapper = styled.div`
   @media (min-width: 450px) {
     flex-direction: row;
   } */
-`;
-
-const Datepicker = styled.div`
-  height: 100%;
-  width: 100%;
-  border-right: 1px solid ${theme.borderColor};
 `;
 
 const Button = styled.button`

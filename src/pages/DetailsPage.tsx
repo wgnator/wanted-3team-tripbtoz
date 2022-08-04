@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { theme } from '../styles/theme';
+import { MOBILE_BREAKPOINT, TABLET_BREAKPOINT } from '../constants/constants';
 
 export default function DetailsPage() {
   return (
@@ -15,11 +16,11 @@ export default function DetailsPage() {
         </HotelInformation>
         <RoomInformation>
           <RoomTypeContainer>
+            <RoomImage src="/images/room.jpg" alt="hotel" />
             <RoomTypeInformation>
               <RoomType>Room</RoomType>
               <Occupancy>기준 2인 | 최대 2인</Occupancy>
             </RoomTypeInformation>
-            <RoomImage src="/images/room.jpg" alt="hotel" />
           </RoomTypeContainer>
           <ReservationContainer>
             <div>
@@ -41,7 +42,7 @@ const Container = styled.div`
   padding: 1rem 0;
   background-color: ${theme.onHoverBackgroundColor};
 
-  @media screen and (max-width: 1024px) {
+  @media screen and (max-width: ${TABLET_BREAKPOINT}px) {
     background-color: white;
   }
 `;
@@ -51,13 +52,13 @@ const Content = styled.div`
   margin: 0 auto;
   background-color: ${theme.onHoverBackgroundColor};
 
-  @media screen and (max-width: 1024px) {
-    width: 768px;
+  @media screen and (max-width: ${TABLET_BREAKPOINT}px) {
+    width: ${MOBILE_BREAKPOINT}px;
     display: block;
     box-shadow: rgb(153 153 153) 0px 10px 55px;
   }
 
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: ${MOBILE_BREAKPOINT}px) {
     width: 100%;
   }
 `;
@@ -66,7 +67,7 @@ const HotelInformation = styled.div`
   display: flex;
   justify-content: space-between;
 
-  @media screen and (max-width: 1024px) {
+  @media screen and (max-width: ${TABLET_BREAKPOINT}px) {
     flex-direction: column;
   }
 `;
@@ -77,7 +78,7 @@ const HotelImage = styled.img`
   display: block;
   object-fit: cover;
 
-  @media screen and (max-width: 1024px) {
+  @media screen and (max-width: ${TABLET_BREAKPOINT}px) {
     width: 100%;
     height: auto;
   }
@@ -89,7 +90,7 @@ const HotelIntroduction = styled.div`
   padding: 1.5rem 1rem;
   background-color: white;
 
-  @media screen and (max-width: 1024px) {
+  @media screen and (max-width: ${TABLET_BREAKPOINT}px) {
     width: 100%;
   }
 `;
@@ -121,7 +122,7 @@ const RoomInformation = styled.div`
   padding: 24px;
   background-color: white;
 
-  @media screen and (max-width: 1024px) {
+  @media screen and (max-width: ${TABLET_BREAKPOINT}px) {
     width: 100%;
   }
 `;
@@ -132,19 +133,24 @@ const RoomImage = styled.img`
   border-radius: 4px;
   object-fit: cover;
 
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: ${MOBILE_BREAKPOINT}px) {
     width: 100%;
-    height: 36.1111vw;
+   height: 36.1111vw;;
   }
 `;
 
 const RoomTypeContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  flex-direction: row-reverse;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 0.5rem;
 
-  @media screen and (max-width: 768px) {
-    display: block;
+  @media screen and (max-width: ${TABLET_BREAKPOINT}px) {
+    grid-template-columns: 1fr 2fr;
+  }
+
+  @media screen and (max-width: ${MOBILE_BREAKPOINT}px) {
+   display: flex;
+   flex-direction: column-reverse;
   }
 `;
 
@@ -152,11 +158,6 @@ const RoomTypeInformation = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  width: 457px;
-
-  @media screen and (max-width: 768px) {
-    width: 100%;
-  }
 `;
 
 const RoomType = styled.div`
@@ -195,3 +196,4 @@ const ReservationButton = styled.button`
   margin-top: 0.6rem;
   border-radius: 4px;
 `;
+
