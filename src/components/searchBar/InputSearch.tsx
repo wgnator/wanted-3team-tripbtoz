@@ -2,8 +2,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import SearchIcon from '../../assets/search';
 import XIcon from '../../assets/x';
-import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
+import { useAppDispatch } from '../../hooks/reduxHooks';
 import { setQuery } from '../../reducers/searchQueryReducer';
+import { MOBILE_BREAKPOINT } from '../../constants/constants';
 import { theme } from '../../styles/theme';
 
 interface InputSearchProps {}
@@ -13,7 +14,6 @@ export default function InputSearch({}: InputSearchProps) {
   const [hasXIcon, setHasXIcon] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const dispatch = useAppDispatch();
-  const searchString = useAppSelector((state) => state.searchQuery.hotelName);
   const clearInput = () => {
     inputRef.current!.value = '';
     setHasXIcon(false);
@@ -71,7 +71,7 @@ const InputSearchWrapper = styled.label`
   :hover {
     background-color: ${theme.onHoverBackgroundColor};
   }
-  @media (min-width: 970px) {
+  @media (min-width: ${MOBILE_BREAKPOINT}px) {
     height: 100%;
     border-right: 1px solid ${theme.borderColor};
   }
