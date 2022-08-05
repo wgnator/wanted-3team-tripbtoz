@@ -1,13 +1,16 @@
+import { useEffect } from 'react';
 import styled from 'styled-components';
 import { theme } from '../styles/theme';
-import { MOBILE_BREAKPOINT, TABLET_BREAKPOINT } from '../constants/constants';
 import { useNavigate, useParams } from 'react-router-dom';
+import { MOBILE_BREAKPOINT, TABLET_BREAKPOINT } from '../constants/constants';
 import useHotels from '../hooks/useHotels';
-import { useEffect } from 'react';
+import { useAppSelector } from '../hooks/reduxHooks';
+import { getLocalStorage, setLocalStorage } from '../utils/storage';
 
 export default function DetailsPage() {
   const { getHotelInfo, hotelInfo, isLoading } = useHotels();
   const { hotelName } = useParams();
+  const reservationInfo = useAppSelector((state) => state.searchQuery.determined);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -28,6 +31,22 @@ export default function DetailsPage() {
       </Container>
     );
   }
+
+  const handleReservationClick = () => {
+    const { checkInDate, checkOutDate, numberOfGuests } = reservationInfo;
+
+    const currentReservationHotels = getLocalStorage('userHotels', []);
+    const enteredReservationHotel = {
+      hotelName: hotelInfo.hotel_name,
+      checkInDate: new Date(checkInDate),
+      checkOutDate: new Date(checkOutDate),
+      numberOfGuests,
+    };
+    const newReservationHotels = [...currentReservationHotels, enteredReservationHotel];
+    setLocalStorage('userHotels', newReservationHotels);
+    alert('예약이 완료되었습니다!');
+    navigate('/');
+  };
 
   return (
     <Container>
@@ -56,7 +75,7 @@ export default function DetailsPage() {
                 <Night>1박</Night>
                 100,000 원
               </HotelRate>
-              <ReservationButton>예약</ReservationButton>
+              <ReservationButton onClick={() => handleReservationClick()}>예약</ReservationButton>
             </div>
           </ReservationContainer>
         </RoomInformation>
@@ -223,4 +242,5 @@ const ReservationButton = styled.button`
   padding: 0.5rem 2.5rem;
   margin-top: 0.6rem;
   border-radius: 4px;
+  cursor: pointer;
 `;

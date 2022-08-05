@@ -3,10 +3,9 @@ import styled from 'styled-components';
 import { useAppDispatch } from '../../hooks/reduxHooks';
 import { setQuery } from '../../reducers/searchQueryReducer';
 import { theme } from '../../styles/theme';
-import { convertToDateString } from '../../utils/utils';
+import { convertToDateString, getDayGap, getToday } from '../../utils/utils';
 import DatePicker from './Datepicker';
 import { Container, ModalBackground, Printer } from './OptionSelector';
-import { getDayGap, getToday } from './services/datepickerService';
 
 interface DateSelectionProps {}
 export interface CheckInAndOut {
