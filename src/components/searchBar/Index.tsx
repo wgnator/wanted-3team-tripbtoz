@@ -7,9 +7,14 @@ import { theme } from '../../styles/theme';
 import DateSelection from './DateSelection';
 import InputSearch from './InputSearch';
 import OptionSelector from './OptionSelector';
+import { useEffect } from 'react';
 
 export default function SearchBar() {
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(determineQuery());
+  }, []);
 
   return (
     <Container>
