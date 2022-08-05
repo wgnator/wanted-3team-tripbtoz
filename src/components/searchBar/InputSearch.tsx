@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
+import { KeyboardEvent, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import SearchIcon from '../../assets/search';
 import XIcon from '../../assets/x';
 import { useAppDispatch } from '../../hooks/reduxHooks';
-import { setQuery } from '../../reducers/searchQueryReducer';
+import { determineQuery, setQuery } from '../../reducers/searchQueryReducer';
 import { MOBILE_BREAKPOINT } from '../../constants/constants';
 import { theme } from '../../styles/theme';
 import Autocomplete from './Autocomplete';
@@ -48,6 +48,19 @@ export default function InputSearch({}: InputSearchProps) {
     isOpen && setTimeout(() => setIsOpen(false), 100);
   };
 
+  const handleKeydown = (event: KeyboardEvent<HTMLInputElement>) => {
+    switch (event.code) {
+      case 'Enter':
+        dispatch(determineQuery());
+        return;
+      case 'Escape':
+        return;
+      default:
+        !isOpen && openRecommendation();
+        return;
+    }
+  };
+
   return (
     <InputSearchWrapper htmlFor="search_input" onBlur={closeRecommendation} onFocus={openRecommendation}>
       <SearchIcon />
@@ -55,6 +68,7 @@ export default function InputSearch({}: InputSearchProps) {
         id="search_input"
         placeholder="지역명, 호텔명, 펜션명 검색"
         onChange={handleOnChange}
+        onKeyDown={handleKeydown}
         value={inputValue}
         ref={inputRef}
       />
