@@ -17,10 +17,14 @@ import { Hotel } from "../interfaces/types";
 
   const fetchData = () => {
     const tempPage:number = pageRef.current * 10;
+    console.log(hotels.length , pageRef.current*10);
+    
     if(hotels.length < tempPage) setIsLastData(true)
-    pageRef.current = pageRef.current === null ? 0 : pageRef.current + 1;
-    getResultsByPage(searchQuery ? 1 : pageRef.current , searchQuery);
+    
+    if(searchQuery.hotelName)console.log("쿼리있다",searchQuery);
+    getResultsByPage(pageRef.current , searchQuery);
   };
+
 
 
   React.useEffect(()=>{
@@ -45,6 +49,8 @@ import { Hotel } from "../interfaces/types";
   },[viewTarget])
 
   React.useEffect(()=>{
+    console.log(hotels);
+    pageRef.current = pageRef.current === null ? 0 : pageRef.current + 1;
     if(hotels.length) setDataLoading(false)
     window.scrollTo({
       top: window.pageYOffset - window.pageYOffset/500,
@@ -55,9 +61,6 @@ import { Hotel } from "../interfaces/types";
   return (
     <Container id="컨테이너">
       <HotelCards >
-        <Target>
-          <Spinner size="lg" />
-        </Target>
         {dataLoading ? 
         new Array(10).fill(1).map((data,i)=>{
           return <CardSkeleton key={"skel"+data+i}/>

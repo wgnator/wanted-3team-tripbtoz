@@ -21,7 +21,7 @@ export default function useHotels() {
 
   function getResultsByPage(page: number = 1, searchParameter?: UserDataType | null) {
     setIsLoading(true);
-    if (page > 0) {
+    if (page === 1) {
       const searchQueryString = searchParameter ? getSearchQueryString(searchParameter, userHotels) : '';
       setSearchQueryString(searchQueryString);
       setTimeout(async () => {
