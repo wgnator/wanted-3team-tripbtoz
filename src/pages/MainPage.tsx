@@ -11,7 +11,6 @@ import { Hotel } from "../interfaces/types";
   const [dataLoading,setDataLoading] = React.useState<boolean>(true);
   const [viewTarget,setVeiwTarget] = React.useState<Element | null>(null);
   const [isLastData,setIsLastData] = React.useState<boolean>(false);
-  const [dataLength,setDataLength] = React.useState(0);
   const pageRef = React.useRef<number | null >(null);
   const {isLoading,hotels,getResultsByPage} = useHotels();  
   const searchQuery = useAppSelector((state) => state.searchQuery.determined);
@@ -19,7 +18,6 @@ import { Hotel } from "../interfaces/types";
   const fetchData = () => {
     if(hotels.length < pageRef.current * 10)setIsLastData(true)
     pageRef.current = pageRef.current === null ? 1 : pageRef.current + 1;
-    setDataLength(hotels.length)
     getResultsByPage(pageRef.current , searchQuery);
   };
 
