@@ -1,6 +1,8 @@
-import { useReducer, useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import UserSingle from '../../assets/UserSingle';
+import { useAppDispatch } from '../../hooks/reduxHooks';
+import { setQuery } from '../../reducers/searchQueryReducer';
 import { MOBILE_BREAKPOINT } from '../../constants/constants';
 import { theme } from '../../styles/theme';
 
@@ -9,9 +11,9 @@ interface OptionSelectorProps {}
 export default function OptionSelector({}: OptionSelectorProps) {
   const [numberOfPeople, setNumberOfPeople] = useState({ adult: 2, children: 0 });
   const [isOpen, setIsOpen] = useState(false);
-
   const isLessThen = (number: number, lessThen: number) => number < lessThen;
   const isMoreThen = (number: number, moreThen: number) => number > moreThen;
+  const dispatch = useAppDispatch();
 
   const MAXIMUM = {
     adult: 8,
@@ -42,7 +44,9 @@ export default function OptionSelector({}: OptionSelectorProps) {
   const openSelecter = () => setIsOpen((openState) => !openState);
   const closeSelector = () => setIsOpen(false);
 
-  // 할일: numberOfPeople을 리덕스에 저장
+  useEffect(() => {
+    dispatch(setQuery({ numberOfGuests: numberOfPeople.adult + numberOfPeople.children }));
+  }, [numberOfPeople]);
 
   return (
     <Container>

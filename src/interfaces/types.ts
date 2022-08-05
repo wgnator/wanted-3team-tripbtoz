@@ -4,6 +4,12 @@ export interface UserDataType {
   checkOutDate: Date;
   numberOfGuests: number;
 }
+export interface searchQueryType {
+  hotelName: string;
+  checkInDate: string;
+  checkOutDate: string;
+  numberOfGuests: string;
+}
 
 export type UserData = UserDataType[];
 

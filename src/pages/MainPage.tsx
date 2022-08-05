@@ -1,32 +1,36 @@
+import React from 'react';
+import { shallowEqual } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import CardSkeleton from '../components/CardSkeleton';
+import MainHotelCard from '../components/MainHotelCard';
+import { useAppSelector } from '../hooks/reduxHooks';
+import useHotels from '../hooks/useHotels';
+import { Hotel } from '../interfaces/types';
 
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
-import CardSkeleton from "../components/CardSkeleton";
-import MainHotelCard from "../components/MainHotelCard";
-import useHotels from "../hooks/useHotels";
-import { Hotel } from "../interfaces/types";
-
- export default function MainPage() {
+export default function MainPage() {
   const navigate = useNavigate();
-  const [viewTarget,setVeiwTarget] = React.useState<Element | null>(null);
-  const pageRef = React.useRef<number | null >(null);
-  const {isLoading,hotels,getResultsByPage} = useHotels();  
-  const clcikHotel = (hotelName:string) => {
-    navigate(`details/${hotelName}`)
-  }
+  const [viewTarget, setVeiwTarget] = React.useState<Element | null>(null);
+  const pageRef = React.useRef<number | null>(null);
+  const { isLoading, hotels, getResultsByPage } = useHotels();
+  const searchQuery = useAppSelector((state) => state.searchQuery.determined);
+
+  const clcikHotel = (hotelName: string) => {
+    navigate(`details/${hotelName}`);
+  };
   const fetchData = () => {
     pageRef.current = pageRef.current === null ? 0 : pageRef.current + 1;
-    getResultsByPage(pageRef.current)
-  }
+    getResultsByPage(pageRef.current, searchQuery);
+    console.log('main page requested search query: ', searchQuery);
+  };
 
   const observerCallback = (entries: any) => {
     const [entry] = entries;
     if (entry.isIntersecting) fetchData();
   };
   const options = {
-    root:null,
-    rootMargin:"0px",
+    root: null,
+    rootMargin: '0px',
     threshold: 0.5,
   };
 
@@ -34,20 +38,29 @@ import { Hotel } from "../interfaces/types";
     const observer = new IntersectionObserver(observerCallback, options);
 
     if (viewTarget) observer.observe(viewTarget);
-  },[viewTarget])
+  }, [viewTarget]);
+
+  React.useEffect(() => {
+    getResultsByPage(1, searchQuery);
+  }, [searchQuery]);
 
   return (
     <Container id="컨테이너">
-      <HotelCards >
-        {isLoading ? 
-        new Array(10).fill(1).map((i)=>{
-          return <CardSkeleton />
-        })
-        :
-        hotels.map((hotel:Hotel,index:number)=>{
-          const lastIndex = index === hotels.length-1;
-          return (<MainHotelCard key={hotel.hotel_name+index} hotel={hotel} targetRef={lastIndex ? setVeiwTarget : null} />)
-        })}
+      <HotelCards>
+        {isLoading
+          ? new Array(10).fill(1).map((i) => {
+              return <CardSkeleton />;
+            })
+          : hotels.map((hotel: Hotel, index: number) => {
+              const lastIndex = index === hotels.length - 1;
+              return (
+                <MainHotelCard
+                  key={hotel.hotel_name + index}
+                  hotel={hotel}
+                  targetRef={lastIndex ? setVeiwTarget : null}
+                />
+              );
+            })}
       </HotelCards>
     </Container>
   );

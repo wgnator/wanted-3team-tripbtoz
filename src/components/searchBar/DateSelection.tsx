@@ -1,6 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { useAppDispatch } from '../../hooks/reduxHooks';
+import { setQuery } from '../../reducers/searchQueryReducer';
 import { theme } from '../../styles/theme';
+import { convertToDateString } from '../../utils/utils';
 import DatePicker from './Datepicker';
 import { Container, ModalBackground, Printer } from './OptionSelector';
 import { getDayGap, getToday } from './services/datepickerService';
@@ -8,17 +11,7 @@ import { getDayGap, getToday } from './services/datepickerService';
 interface DateSelectionProps {}
 export interface CheckInAndOut {
   checkIn: Date;
-  checkOut: Date | null;
-}
-
-export type DaySelectTypes = 'startPoint' | 'endPotint' | 'betweenPoint' | 'alonePoint';
-interface DayProps {
-  isBlur?: boolean;
-  color?: string;
-  hasPointer?: boolean;
-  isSelect?: DaySelectTypes;
-  isToday?: boolean;
-  isPastDate?: boolean;
+  checkOut: Date;
 }
 
 export default function DateSelection({}: DateSelectionProps) {
@@ -34,12 +27,23 @@ export default function DateSelection({}: DateSelectionProps) {
 
   const [isOpen, setIsOpen] = useState(false);
 
+  const dispatch = useAppDispatch();
+
   const openDatepicker = () => {
     setIsOpen((state) => !state);
   };
   const closeDatepicker = () => {
     setIsOpen(false);
   };
+
+  useEffect(() => {
+    dispatch(
+      setQuery({
+        checkInDate: convertToDateString(checkInAndOut.checkIn),
+        checkOutDate: convertToDateString(checkInAndOut.checkOut),
+      }),
+    );
+  }, [checkInAndOut]);
 
   return (
     <Container style={{ position: 'inherit' }}>
