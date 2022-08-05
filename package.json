@@ -10,6 +10,7 @@
     "server": "npx json-server ./hotels.json --port 8000"
   },
   "dependencies": {
+    "@chakra-ui/spinner": "^2.0.4",
     "@fortawesome/fontawesome-svg-core": "^6.1.2",
     "@reduxjs/toolkit": "^1.8.3",
     "axios": "^0.27.2",

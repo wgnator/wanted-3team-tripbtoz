@@ -6,6 +6,7 @@ import Main from './pages/MainPage';
 import ReservationStatusPage from './pages/ReservationStatusPage';
 
 export default function Router() {
+  // window.history.scrollRestoration = "manual";
   return (
     <BrowserRouter>
       <Routes>

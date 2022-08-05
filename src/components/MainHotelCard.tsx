@@ -1,13 +1,12 @@
 import React from "react";
+import { Spinner } from "@chakra-ui/spinner"
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Hotel } from "../interfaces/types";
 interface props {
   hotel:Hotel,
-  targetRef:any|undefined
 }
-export default function MainHotelCard({hotel,targetRef}:props) {
-  // const [loaded, setLoaded] = React.useState(true);
+export default function MainHotelCard({hotel}:props) {
   const navigate = useNavigate();
   const {hotel_name,occupancy} = hotel;
   const hotel1 = hotel_name.split(" ")[0].length;
@@ -16,14 +15,14 @@ export default function MainHotelCard({hotel,targetRef}:props) {
     navigate(`details/${hotel_name}`)
   }
   return (
-    <Container ref={targetRef} onClick={hotelClick}>
+    <Container  onClick={hotelClick}>
       <ImgWrap>
         <img src={`src/images/hotel${hotel1 < 11 ? hotel1 : 10}.png`} />
       </ImgWrap>
       <ContentWrap>
         <HotelRating>5.0성급</HotelRating>
-        <HotelName>{hotel_name}</HotelName>
-        <HotelAddress>주소지 불명</HotelAddress>
+        <HotelName size={hotel_name.length < 12 ? true : false} >{hotel_name}</HotelName>
+        <HotelAddress>대한민국 , 서울</HotelAddress>
         <HotelValue>
           <i></i>
           <ValueScore>
@@ -34,7 +33,7 @@ export default function MainHotelCard({hotel,targetRef}:props) {
           <ValueReview>총 {hotel1 * 123}건의 리뷰</ValueReview>
         </HotelValue>
         <HotelPrice>
-          <p>{(hotel1 * 43210).toLocaleString('ko-KR')} 원</p>
+          <p>100,000 원</p>
         </HotelPrice>
         <HotelNotPrice>세금 및 수수료 불포함</HotelNotPrice>
       </ContentWrap>
@@ -101,18 +100,6 @@ const ContentWrap = styled.div`
     line-height: 18px;
   }
 `;
-const HotelName = styled.h2`
-  @media (max-width:2560px) {
-    margin: 7px 0;
-    font-size: 16px;
-    line-height: 24px;
-  };
-  @media (max-width: 768px) {
-    margin: 7px 0;
-    font-size: 14px;
-    line-height: 12px;
-  }
-`;
 const HotelRating = styled.em`
   border: 1px solid black;
   @media (max-width:2560px) {
@@ -126,6 +113,19 @@ const HotelRating = styled.em`
     padding: 0px 3.5px;
   }
 `;
+const HotelName = styled.h2<{size:boolean}>`
+  @media (max-width:2560px) {
+    margin: 7px 0;
+    font-size: 16px;
+    line-height: 24px;
+  };
+  @media (max-width: 768px) {
+    margin: 7px 0;
+    font-size: ${props => props.size ? "14px" : "12px"};
+    line-height: 12px;
+  }
+`;
+
 const HotelAddress = styled.em`
   font-style: normal;
   color: rgb(104, 104, 136);
@@ -194,6 +194,7 @@ const HotelPrice = styled.div`
   p{
     width: 100%;
     text-align: right;
+    font-weight: bold;
     @media (max-width:2560px) {
       margin-top: 2.2rem;
       font-size: 16px;

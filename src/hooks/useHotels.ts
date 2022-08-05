@@ -2,36 +2,55 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import { hotelsService } from '../api/axiosInstance';
 import { Hotel, UserDataType } from '../interfaces/types';
-import { getExceptedHotelsQueryString } from '../utils/getQueryString';
+import { getSearchQueryString } from '../utils/getQueryString';
 
 export default function useHotels() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [hotels, setHotels] = useState<Hotel[]>([]);
-  async function getAllByPage(page: number = 1) {
-    
+  const [searchQueryString, setSearchQueryString] = useState<string>('');
+  const [hotelInfo, setHotelInfo] = useState({});
+
+  const userHotels = Object.values(window.localStorage)
+    .map((value) => JSON.parse(value))
+    .filter(
+      (value) =>
+        Object.keys(value).includes('hotelName') &&
+        Object.keys(value).includes('checkInDate') &&
+        Object.keys(value).includes('checkOutDate') &&
+        Object.keys(value).includes('numberOfGuests'),
+    );
+
+  function getResultsByPage(page: number = 1, searchParameter?: UserDataType | null) {
+    setIsLoading(true);
+    if (page === 1) {
+      const searchQueryString = searchParameter ? getSearchQueryString(searchParameter, userHotels) : '';
+      setSearchQueryString(searchQueryString);
+      setTimeout(async () => {
+        const data = await hotelsService.get(`?${searchQueryString}&_page=${page}`);
+        setHotels(data);
+        setIsLoading(false);
+      }, 500);
+    } else {
+      setTimeout(async () => {
+        const data = await hotelsService.get(`?${searchQueryString}&_page=${page}`);
+        setHotels([...hotels, ...data]);
+        setIsLoading(false);
+      }, 500);
+    }
+  }
+
+  function getHotelInfo(hotelName: string) {
+    setIsLoading(true);
     setTimeout(async () => {
-      const data = await hotelsService.get(`?_page=${page}`);
-      page === 1 ? setHotels(data) : setHotels([...hotels, ...data]);
+      const data = await hotelsService.get(`?hotel_name=${hotelName}`);
+      setHotelInfo(data);
       setIsLoading(false);
     }, 500);
   }
 
-  async function getResultsByPage(searchParameter: UserDataType, page: number = 1) {
-    // setIsLoading(true);
-    const searchString = searchParameter.hotelName?.split(' ').join('+') || '';
-    const neQueryString = getExceptedHotelsQueryString(searchParameter.checkInDate, searchParameter.checkOutDate);
-    setTimeout(async () => {
-      const data = await hotelsService.get(
-        `?occupancy.max_gte=${searchParameter.numberOfGuests}&q=${searchString}${neQueryString}&_page=${page}`,
-      );
-      page === 1 ? setHotels(data) : setHotels([...hotels, ...data]);
-      // setIsLoading(false);
-    }, 500);
-  }
-
   useEffect(() => {
-    getAllByPage();
+    getResultsByPage(1, null);
   }, []);
 
-  return { isLoading, hotels, getAllByPage, getResultsByPage };
+  return { isLoading, hotels, userHotels, hotelInfo, getResultsByPage, getHotelInfo };
 }
