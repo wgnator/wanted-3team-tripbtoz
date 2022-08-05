@@ -17,12 +17,12 @@ export default function MainHotelCard({hotel}:props) {
   return (
     <Container  onClick={hotelClick}>
       <ImgWrap>
-        <img src={`src/images/hotel${hotel1 < 11 ? hotel1 : 10}.png`} />
+        <img src={`src/images/hotel0.png`} />
       </ImgWrap>
       <ContentWrap>
         <HotelRating>5.0성급</HotelRating>
         <HotelName size={hotel_name.length < 12 ? true : false} >{hotel_name}</HotelName>
-        <HotelAddress>대한민국 , 서울</HotelAddress>
+        <HotelAddress>서울시 강남구 테헤란로 415, L7빌딩</HotelAddress>
         <HotelValue>
           <i></i>
           <ValueScore>

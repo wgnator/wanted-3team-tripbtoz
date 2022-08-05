@@ -1,9 +1,9 @@
 import { Spinner } from "@chakra-ui/spinner";
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import CardSkeleton from "../components/CardSkeleton";
 import MainHotelCard from "../components/MainHotelCard";
+import { useAppSelector } from "../hooks/reduxHooks";
 import useHotels from "../hooks/useHotels";
 import { Hotel } from "../interfaces/types";
 
@@ -13,24 +13,24 @@ import { Hotel } from "../interfaces/types";
   const [isLastData,setIsLastData] = React.useState<boolean>(false);
   const pageRef = React.useRef<number | null >(null);
   const {isLoading,hotels,getResultsByPage} = useHotels();  
+  const searchQuery = useAppSelector((state) => state.searchQuery.determined);
 
   const fetchData = () => {
     const tempPage:number = pageRef.current * 10;
     if(hotels.length < tempPage) setIsLastData(true)
-    console.log("패치",hotels.length , tempPage);
     pageRef.current = pageRef.current === null ? 0 : pageRef.current + 1;
-    getResultsByPage(pageRef.current)
-  }
+    getResultsByPage(searchQuery ? 1 : pageRef.current , searchQuery);
+  };
+
 
   React.useEffect(()=>{
     fetchData()
-  },[])
-  
+  },[searchQuery])
+
   const observerCallback = (entries:any) => {
     if(isLastData) return
     const [entry] = entries
     if(entry.isIntersecting) fetchData()
-
   }
   const options = {
     root:null,
@@ -38,7 +38,7 @@ import { Hotel } from "../interfaces/types";
     threshold: 0.7,
   };
 
-  React.useEffect(()=>{
+  React.useEffect(() => {
     const observer = new IntersectionObserver(observerCallback, options);
     if (viewTarget) observer.observe(viewTarget)
     return () => { if (viewTarget) observer.unobserve(viewTarget) }

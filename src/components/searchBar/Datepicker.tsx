@@ -22,6 +22,7 @@ import styled from 'styled-components';
 import { theme } from '../../styles/theme';
 import { IoIosArrowDropleft, IoIosArrowDropright } from 'react-icons/io';
 import { CheckInAndOut } from './DateSelection';
+import { MOBILE_BREAKPOINT } from '../../constants/constants';
 
 type DateItemPropsType = {
   isPast?: boolean;
@@ -186,10 +187,12 @@ const Container = styled.div`
   background-color: rgb(255, 255, 255);
   border: ${theme.borderColor};
   box-shadow: 1px 3px 10px 0px rgba(0, 0, 0, 0.5);
-  @media (max-width: 480px) {
+  @media (max-width: ${MOBILE_BREAKPOINT}px) {
+    top: 7rem;
     width: 100%;
     padding: 5%;
     left: 0;
+    min-width: 360px;
   }
 `;
 const ArrowWrapper = styled.div<{ direction: 'left' | 'right' }>`
@@ -205,14 +208,14 @@ const ArrowWrapper = styled.div<{ direction: 'left' | 'right' }>`
     width: 1.2rem;
     height: 1.2rem;
   }
-  @media (max-width: 480px) {
+  @media (max-width: ${MOBILE_BREAKPOINT}px) {
     display: none;
   }
 `;
 const Window = styled.div`
   width: 100%;
   overflow: hidden;
-  @media (max-width: 480px) {
+  @media (max-width: ${MOBILE_BREAKPOINT}px) {
     overflow: auto;
   }
 `;
@@ -220,7 +223,7 @@ const MonthsWrapper = styled.div`
   width: fit-content;
   display: flex;
   flex-direction: row;
-  @media (max-width: 480px) {
+  @media (max-width: ${MOBILE_BREAKPOINT}px) {
     flex-direction: column;
   }
 `;
@@ -230,7 +233,7 @@ const MonthContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  @media (max-width: 480px) {
+  @media (max-width: ${MOBILE_BREAKPOINT}px) {
     padding: 0;
     margin: 1rem auto;
     width: 100%;

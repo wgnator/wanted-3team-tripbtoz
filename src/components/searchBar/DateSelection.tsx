@@ -1,35 +1,17 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { useAppDispatch } from '../../hooks/reduxHooks';
+import { setQuery } from '../../reducers/searchQueryReducer';
 import { theme } from '../../styles/theme';
-import DatePicker from './DatePicker';
-import { Container, ModalBackground, Printer, Selecter } from './OptionSelector';
-import {
-  getDayGap,
-  getMonthDate,
-  getToday,
-  isAlonePoint,
-  isBetweenPoint,
-  isEndPoint,
-  isPastDate,
-  isSameDate,
-  isStartOrEndPoint,
-  isStartPoint,
-} from './services/datepickerService';
+import { convertToDateString } from '../../utils/utils';
+import DatePicker from './Datepicker';
+import { Container, ModalBackground, Printer } from './OptionSelector';
+import { getDayGap, getToday } from './services/datepickerService';
 
 interface DateSelectionProps {}
 export interface CheckInAndOut {
   checkIn: Date;
-  checkOut: Date | null;
-}
-
-export type DaySelectTypes = 'startPoint' | 'endPotint' | 'betweenPoint' | 'alonePoint';
-interface DayProps {
-  isBlur?: boolean;
-  color?: string;
-  hasPointer?: boolean;
-  isSelect?: DaySelectTypes;
-  isToday?: boolean;
-  isPastDate?: boolean;
+  checkOut: Date;
 }
 
 export default function DateSelection({}: DateSelectionProps) {
@@ -45,12 +27,23 @@ export default function DateSelection({}: DateSelectionProps) {
 
   const [isOpen, setIsOpen] = useState(false);
 
+  const dispatch = useAppDispatch();
+
   const openDatepicker = () => {
     setIsOpen((state) => !state);
   };
   const closeDatepicker = () => {
     setIsOpen(false);
   };
+
+  useEffect(() => {
+    dispatch(
+      setQuery({
+        checkInDate: convertToDateString(checkInAndOut.checkIn),
+        checkOutDate: convertToDateString(checkInAndOut.checkOut),
+      }),
+    );
+  }, [checkInAndOut]);
 
   return (
     <Container style={{ position: 'inherit' }}>
@@ -80,7 +73,7 @@ export default function DateSelection({}: DateSelectionProps) {
 }
 
 const DatepickerPrinter = styled(Printer)`
-  min-width: 400px;
+  min-width: 375px;
   max-width: 480px;
   gap: 0;
 `;

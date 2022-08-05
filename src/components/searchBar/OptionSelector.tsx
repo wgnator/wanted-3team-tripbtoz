@@ -1,6 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import UserSingle from '../../assets/UserSingle';
+import { useAppDispatch } from '../../hooks/reduxHooks';
+import { setQuery } from '../../reducers/searchQueryReducer';
+import { MOBILE_BREAKPOINT } from '../../constants/constants';
 import { theme } from '../../styles/theme';
 
 interface OptionSelectorProps {}
@@ -8,9 +11,9 @@ interface OptionSelectorProps {}
 export default function OptionSelector({}: OptionSelectorProps) {
   const [numberOfPeople, setNumberOfPeople] = useState({ adult: 2, children: 0 });
   const [isOpen, setIsOpen] = useState(false);
-
   const isLessThen = (number: number, lessThen: number) => number < lessThen;
   const isMoreThen = (number: number, moreThen: number) => number > moreThen;
+  const dispatch = useAppDispatch();
 
   const MAXIMUM = {
     adult: 8,
@@ -41,7 +44,9 @@ export default function OptionSelector({}: OptionSelectorProps) {
   const openSelecter = () => setIsOpen((openState) => !openState);
   const closeSelector = () => setIsOpen(false);
 
-  // 할일: numberOfPeople을 리덕스에 저장
+  useEffect(() => {
+    dispatch(setQuery({ numberOfGuests: numberOfPeople.adult + numberOfPeople.children }));
+  }, [numberOfPeople]);
 
   return (
     <Container>
@@ -58,7 +63,7 @@ export default function OptionSelector({}: OptionSelectorProps) {
       </Printer>
       {isOpen && (
         <>
-          <Selecter onBlur={closeSelector}>
+          <Selecter>
             <Row>
               <Label>성인</Label>
               <CountWrapper>
@@ -85,20 +90,26 @@ export default function OptionSelector({}: OptionSelectorProps) {
 
 export const Container = styled.div`
   position: relative;
-  width: fit-content;
-  height: 100%;
+  height: 3rem;
+  width: 100%;
   display: flex;
+  align-items: center;
   white-space: nowrap;
-  border-right: 1px solid ${theme.borderColor};
   cursor: pointer;
   :hover {
     background-color: ${theme.onHoverBackgroundColor};
+  }
+  @media (min-width: ${MOBILE_BREAKPOINT}px) {
+    height: 100%;
+    width: fit-content;
+    border-right: 1px solid ${theme.borderColor};
   }
 `;
 export const Printer = styled.div`
   display: flex;
   align-items: center;
-  height: 100%;
+  justify-content: center;
+  height: fit-content;
   width: 100%;
   padding: 0 1rem;
   gap: 1rem;
@@ -110,6 +121,7 @@ const Column = styled.div`
   justify-content: center;
 `;
 const Span = styled.span<{ styledColor?: string; thin?: boolean; smallFont?: boolean }>`
+  pointer-events: none;
   ${(props) => props.styledColor && `color:${props.styledColor}`};
   ${(props) => props.thin && `font-weight:300`};
   ${(props) => props.smallFont && `font-size: 0.7rem`};
@@ -127,18 +139,22 @@ export const ModalBackground = styled.div`
 `;
 export const Selecter = styled.div`
   position: absolute;
-  min-width: 360px;
-  max-width: 480px;
-  top: 66px;
-  right: 4px;
   display: flex;
   flex-direction: column;
   box-shadow: 0px 0px 12px 0px rgba(0, 0, 0, 0.3);
   background-color: white;
   padding: 1rem;
-  border-radius: 4px;
   gap: 1.5rem;
   z-index: 100;
+  top: 2.7rem;
+  width: 100vw;
+  @media (min-width: ${MOBILE_BREAKPOINT}px) {
+    border-radius: 4px;
+    min-width: 360px;
+    max-width: 480px;
+    top: 66px;
+    right: 0;
+  }
 `;
 const Row = styled.div`
   display: flex;

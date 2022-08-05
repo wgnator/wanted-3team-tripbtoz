@@ -12,7 +12,7 @@ export default function Router() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Main />} />
-          <Route path="detail" element={<DetailsPage />} />
+          <Route path="details/:hotelName" element={<DetailsPage />} />
           <Route path="reservation" element={<ReservationStatusPage />} />
         </Route>
       </Routes>
