@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import SearchIcon from '../../assets/search';
 import XIcon from '../../assets/x';
@@ -6,13 +6,17 @@ import { useAppDispatch } from '../../hooks/reduxHooks';
 import { setQuery } from '../../reducers/searchQueryReducer';
 import { MOBILE_BREAKPOINT } from '../../constants/constants';
 import { theme } from '../../styles/theme';
+import Autocomplete from './Autocomplete';
 
 interface InputSearchProps {}
 
 export default function InputSearch({}: InputSearchProps) {
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const [isOpen, setIsOpen] = useState(false);
   const [hasXIcon, setHasXIcon] = useState(false);
   const [inputValue, setInputValue] = useState('');
+
   const dispatch = useAppDispatch();
   const clearInput = () => {
     inputRef.current!.value = '';
@@ -36,8 +40,16 @@ export default function InputSearch({}: InputSearchProps) {
     dispatch(setQuery({ hotelName: inputValue }));
   }, [inputValue]);
 
+  const openRecommendation = () => {
+    setIsOpen(true);
+  };
+
+  const closeRecommendation = () => {
+    isOpen && setTimeout(() => setIsOpen(false), 100);
+  };
+
   return (
-    <InputSearchWrapper htmlFor="search_input">
+    <InputSearchWrapper htmlFor="search_input" onBlur={closeRecommendation} onFocus={openRecommendation}>
       <SearchIcon />
       <SearchInput
         id="search_input"
@@ -49,11 +61,13 @@ export default function InputSearch({}: InputSearchProps) {
       <IconContainer onClick={clearInput}>
         <XIcon hidden={!hasXIcon} />
       </IconContainer>
+      {isOpen && <Autocomplete setInputValue={setInputValue} />}
     </InputSearchWrapper>
   );
 }
 
-const InputSearchWrapper = styled.label`
+export const InputSearchWrapper = styled.label`
+  position: relative;
   height: 3rem;
   width: 100%;
   display: flex;
