@@ -1,5 +1,31 @@
 # wanted-3team-tripbtoz
 
+## 프로젝트 설치 · 실행 방법
+
+1. 프로젝트 클론
+
+```
+git clone https://github.com/Avoler0/wanted-3team-tripbtoz.git
+```
+
+2. 패키지 설치
+
+```
+npm install
+```
+
+3. json server 실행
+
+```
+npm run server
+```
+
+4. 개발 서버 실행
+
+```
+npm run dev
+```
+
 ## 커스텀 훅 문서(데이터 불러오기)
 
 ### useHotels
@@ -18,7 +44,7 @@
 
 - hotelInfo는 호텔상세정보입니다.
 
-- getResultsByPage에 `(searchParameter: UserDataType | null, page: number = 1)` 를 주고 실행하면 검색조건에 맞는 새로운데이터를 페이지당 10개씩 요청합니다.
+- getResultsByPage에 `(page: number = 1, searchParameter?: searchQueryType | null)` 를 주고 실행하면 검색조건에 맞는 새로운데이터를 페이지당 10개씩 요청합니다.
 
 - getHotelInfo에 `(hotelName: string)`을 주고 실행하면 호텔상세정보를 요청합니다.
 
