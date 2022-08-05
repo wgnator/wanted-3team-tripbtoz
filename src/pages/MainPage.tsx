@@ -7,23 +7,24 @@ import { useAppSelector } from '../hooks/reduxHooks';
 import useHotels from '../hooks/useHotels';
 import { Hotel } from '../interfaces/types';
 
-export default function MainPage() {
-  const [dataLoading, setDataLoading] = React.useState<boolean>(true);
-  const [viewTarget, setVeiwTarget] = React.useState<Element>(null);
-  const [isLastData, setIsLastData] = React.useState<boolean>(false);
-  const pageRef = React.useRef<number | null>(1);
-  const { isLoading, hotels, getResultsByPage } = useHotels();
+ export default function MainPage() {
+  const [dataLoading,setDataLoading] = React.useState<boolean>(true);
+  const [viewTarget,setVeiwTarget] = React.useState<Element | null>(null);
+  const [isLastData,setIsLastData] = React.useState<boolean>(false);
+  const pageRef = React.useRef<number>(1);
+  const {isLoading,hotels,getResultsByPage} = useHotels();
   const searchQuery = useAppSelector((state) => state.searchQuery.determined);
 
   const fetchData = () => {
     getResultsByPage(pageRef.current, searchQuery);
   };
-
-  React.useEffect(() => {
-    pageRef.current = 1;
-    setIsLastData(false);
-    if (searchQuery.checkInDate !== '') {
-      fetchData();
+  
+  React.useEffect(()=>{
+    window.scrollTo(0, 0);
+    pageRef.current = 1
+    setIsLastData(false)
+    if(searchQuery.checkInDate !== ''){
+      fetchData()
     }
   }, [searchQuery]);
 
@@ -33,8 +34,8 @@ export default function MainPage() {
       if (hotels.length < pageRef.current * 10) {
         setIsLastData(true);
       }
-      pageRef.current = pageRef.current + 1;
-      fetchData();
+      pageRef.current = pageRef.current + 1
+      fetchData()
     }
   };
   const options = {

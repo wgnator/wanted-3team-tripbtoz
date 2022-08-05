@@ -8,14 +8,11 @@ interface props {
 }
 export default function MainHotelCard({hotel}:props) {
   const navigate = useNavigate();
-  const {hotel_name,occupancy} = hotel;
-  const hotel1 = hotel_name.split(" ")[0].length;
+  const {hotel_name} = hotel;
+  const review = hotel_name.split(" ")[0].length;
   const score = ["1","1","1","1","0.5"]
-  const hotelClick = () => {
-    navigate(`details/${hotel_name}`)
-  }
   return (
-    <Container  onClick={hotelClick}>
+    <Container  onClick={()=>navigate(`details/${hotel_name}`)}>
       <ImgWrap>
         <img src={`src/images/hotel0.png`} />
       </ImgWrap>
@@ -30,7 +27,7 @@ export default function MainHotelCard({hotel}:props) {
               return <div key={"score"+index}></div>
             })}
           </ValueScore>
-          <ValueReview>총 {hotel1 * 123}건의 리뷰</ValueReview>
+          <ValueReview>총 {review * 123}건의 리뷰</ValueReview>
         </HotelValue>
         <HotelPrice>
           <p>100,000 원</p>
