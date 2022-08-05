@@ -21,7 +21,7 @@ export default function MainHotelCard({hotel}:props) {
       </ImgWrap>
       <ContentWrap>
         <HotelRating>5.0성급</HotelRating>
-        <HotelName size={hotel_name.length < 12 ? true : false} >{hotel_name}</HotelName>
+        <HotelName size={hotel_name.length < 12 ? "14px" : "12px"} >{hotel_name}</HotelName>
         <HotelAddress>서울시 강남구 테헤란로 415, L7빌딩</HotelAddress>
         <HotelValue>
           <i></i>
@@ -113,7 +113,7 @@ const HotelRating = styled.em`
     padding: 0px 3.5px;
   }
 `;
-const HotelName = styled.h2<{size:boolean}>`
+const HotelName = styled.h2<{size:string}>`
   @media (max-width:2560px) {
     margin: 7px 0;
     font-size: 16px;
@@ -121,7 +121,7 @@ const HotelName = styled.h2<{size:boolean}>`
   };
   @media (max-width: 768px) {
     margin: 7px 0;
-    font-size: ${props => props.size ? "14px" : "12px"};
+    font-size: ${props => props.size};
     line-height: 12px;
   }
 `;

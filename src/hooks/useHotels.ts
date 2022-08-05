@@ -20,6 +20,8 @@ export default function useHotels() {
   const userHotels = getLocalStorage('userHotels', []);
 
   function getResultsByPage(page: number = 1, searchParameter?: UserDataType | null) {
+    console.log("받은 페이지 넘버",page , searchParameter);
+    
     setIsLoading(true);
     if (page === 1) {
       const searchQueryString = searchParameter ? getSearchQueryString(searchParameter, userHotels) : '';

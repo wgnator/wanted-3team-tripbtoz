@@ -11,28 +11,28 @@ import { Hotel } from "../interfaces/types";
   const [dataLoading,setDataLoading] = React.useState<boolean>(true);
   const [viewTarget,setVeiwTarget] = React.useState<Element | null>(null);
   const [isLastData,setIsLastData] = React.useState<boolean>(false);
+  const [dataLength,setDataLength] = React.useState(0);
   const pageRef = React.useRef<number | null >(null);
   const {isLoading,hotels,getResultsByPage} = useHotels();  
   const searchQuery = useAppSelector((state) => state.searchQuery.determined);
 
   const fetchData = () => {
-    const tempPage:number = pageRef.current * 10;
-    console.log(hotels.length , pageRef.current*10);
-    
-    if(hotels.length < tempPage) setIsLastData(true)
-    
-    if(searchQuery.hotelName)console.log("쿼리있다",searchQuery);
+    if(hotels.length < pageRef.current * 10)setIsLastData(true)
+    pageRef.current = pageRef.current === null ? 1 : pageRef.current + 1;
+    setDataLength(hotels.length)
     getResultsByPage(pageRef.current , searchQuery);
   };
 
 
 
   React.useEffect(()=>{
-    fetchData()
+    if(searchQuery.checkInDate !== ''){
+      fetchData()
+    }
+    
   },[searchQuery])
 
   const observerCallback = (entries:any) => {
-    if(isLastData) return
     const [entry] = entries
     if(entry.isIntersecting) fetchData()
   }
@@ -49,15 +49,13 @@ import { Hotel } from "../interfaces/types";
   },[viewTarget])
 
   React.useEffect(()=>{
-    console.log(hotels);
-    pageRef.current = pageRef.current === null ? 0 : pageRef.current + 1;
-    if(hotels.length) setDataLoading(false)
+    hotels.length && setDataLoading(false)
     window.scrollTo({
       top: window.pageYOffset - window.pageYOffset/500,
       behavior: 'smooth'
     })
   },[hotels])
-  
+
   return (
     <Container id="컨테이너">
       <HotelCards >
@@ -68,13 +66,14 @@ import { Hotel } from "../interfaces/types";
         :
         hotels.map((hotel:Hotel,index:number)=>{
           const isLastIndex = index === hotels.length-1;
-          return (<>
-          <MainHotelCard key={hotel.hotel_name+index} hotel={hotel} />
-          {isLastIndex && 
-          <Target ref={ hotels.length > 9 ? setVeiwTarget : null} >
-            {isLastData ? <LastData>마지막 입니다</LastData> : isLoading && <Spinner size="xl" />}
-          </Target>}
-          </>)
+          return (
+          <div key={hotel.hotel_name+index}>
+            <MainHotelCard  hotel={hotel} />
+            {isLastIndex && 
+            <Target ref={ isLastData ? null : hotels.length > 9 ? setVeiwTarget : null} >
+              {isLastData ? <LastData>마지막 입니다</LastData> : isLoading && <Spinner size="xl" />}
+            </Target>}
+          </div>)
         })}
       </HotelCards>
       
