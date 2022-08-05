@@ -25,7 +25,7 @@ export default function useHotels() {
       const queryString = searchParameter ? getSearchQueryString(searchParameter, userHotels) : '';
       setSearchQueryString(queryString);
       setTimeout(async () => {
-        const data = await hotelsService.get(`?${searchQueryString}&_page=${page}`);
+        const data = await hotelsService.get(`?${queryString}&_page=${page}`);
         setHotels(data);
         setIsLoading(false);
       }, 500);
