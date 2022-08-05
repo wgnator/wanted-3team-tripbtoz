@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { hotelsService } from '../api/axiosInstance';
-import { Hotel, UserDataType, searchQueryType } from '../interfaces/types';
+import { Hotel, UserDataType } from '../interfaces/types';
 import { getSearchQueryString } from '../utils/getQueryString';
 import { getLocalStorage } from '../utils/storage';
 
@@ -19,11 +19,13 @@ export default function useHotels() {
 
   const userHotels = getLocalStorage('userHotels', []);
 
-  function getResultsByPage(page: number = 1, searchParameter?: searchQueryType | null) {
+  function getResultsByPage(page: number = 1, searchParameter?: UserDataType | null) {
+    console.log("받은 페이지 넘버",page , searchParameter);
+    
     setIsLoading(true);
     if (page === 1) {
-      const queryString = searchParameter ? getSearchQueryString(searchParameter, userHotels) : '';
-      setSearchQueryString(queryString);
+      const searchQueryString = searchParameter ? getSearchQueryString(searchParameter, userHotels) : '';
+      setSearchQueryString(searchQueryString);
       setTimeout(async () => {
         const data = await hotelsService.get(`?${searchQueryString}&_page=${page}`);
         setHotels(data);

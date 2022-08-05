@@ -18,6 +18,7 @@ import { Hotel } from "../interfaces/types";
   const fetchData = () => {
     if(hotels.length < pageRef.current * 10)setIsLastData(true)
     pageRef.current = pageRef.current === null ? 1 : pageRef.current + 1;
+    if(searchQuery.hotelName !== '') pageRef.current = 1
     getResultsByPage(pageRef.current , searchQuery);
   };
 
@@ -27,6 +28,7 @@ import { Hotel } from "../interfaces/types";
     if(searchQuery.checkInDate !== ''){
       fetchData()
     }
+    console.log(searchQuery);
     
   },[searchQuery])
 
@@ -47,6 +49,8 @@ import { Hotel } from "../interfaces/types";
   },[viewTarget])
 
   React.useEffect(()=>{
+    console.log(hotels);
+    
     hotels.length && setDataLoading(false)
     window.scrollTo({
       top: window.pageYOffset - window.pageYOffset/500,
