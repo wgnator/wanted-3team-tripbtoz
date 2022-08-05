@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useReducer, useState } from 'react';
 import styled from 'styled-components';
 import UserSingle from '../../assets/UserSingle';
 import { useAppDispatch } from '../../hooks/reduxHooks';
@@ -7,13 +7,22 @@ import { MOBILE_BREAKPOINT } from '../../constants/constants';
 import { theme } from '../../styles/theme';
 
 interface OptionSelectorProps {}
+interface NumberOfPeople {
+  adult: number;
+  children: number;
+}
+
+interface ReducerAction {
+  type: 'increment' | 'decrement';
+  target: 'adult' | 'children';
+}
 
 export default function OptionSelector({}: OptionSelectorProps) {
-  const [numberOfPeople, setNumberOfPeople] = useState({ adult: 2, children: 0 });
   const [isOpen, setIsOpen] = useState(false);
+  const dispatch = useAppDispatch();
+
   const isLessThen = (number: number, lessThen: number) => number < lessThen;
   const isMoreThen = (number: number, moreThen: number) => number > moreThen;
-  const dispatch = useAppDispatch();
 
   const MAXIMUM = {
     adult: 8,
@@ -24,22 +33,23 @@ export default function OptionSelector({}: OptionSelectorProps) {
     children: 0,
   };
 
-  const adultIncrease = () => {
-    if (isMoreThen(numberOfPeople.adult + 1, MAXIMUM.adult)) return;
-    setNumberOfPeople((prevState) => ({ ...prevState, adult: prevState.adult + 1 }));
+  const reducer = (state: NumberOfPeople, { type, target }: ReducerAction) => {
+    switch (type) {
+      case 'increment':
+        if (isMoreThen(state[target] + 1, MAXIMUM[target])) return state;
+        return { ...state, [target]: state[target] + 1 };
+      case 'decrement':
+        if (isLessThen(state[target] - 1, MINIMUM[target])) return state;
+        return { ...state, [target]: state[target] - 1 };
+      default:
+        throw new Error();
+    }
   };
-  const childrenIncrease = () => {
-    if (isMoreThen(numberOfPeople.children + 1, MAXIMUM.children)) return;
-    setNumberOfPeople((prevState) => ({ ...prevState, children: prevState.children + 1 }));
-  };
-  const adultDecrease = () => {
-    if (isLessThen(numberOfPeople.adult - 1, MINIMUM.adult)) return;
-    setNumberOfPeople((prevState) => ({ ...prevState, adult: prevState.adult - 1 }));
-  };
-  const childrenDecrease = () => {
-    if (isLessThen(numberOfPeople.children - 1, MINIMUM.children)) return;
-    setNumberOfPeople((prevState) => ({ ...prevState, children: prevState.children - 1 }));
-  };
+
+  const [numberOfPeople, dispatch2] = useReducer(reducer, {
+    adult: 2,
+    children: 0,
+  });
 
   const openSelecter = () => setIsOpen((openState) => !openState);
   const closeSelector = () => setIsOpen(false);
@@ -67,17 +77,29 @@ export default function OptionSelector({}: OptionSelectorProps) {
             <Row>
               <Label>성인</Label>
               <CountWrapper>
-                <MinusButton disabled={numberOfPeople.adult === MINIMUM.adult} onClick={adultDecrease} />
+                <MinusButton
+                  disabled={numberOfPeople.adult === MINIMUM.adult}
+                  onClick={() => dispatch2({ target: 'adult', type: 'decrement' })}
+                />
                 <Count>{numberOfPeople.adult}</Count>
-                <PlusButton disabled={numberOfPeople.adult === MAXIMUM.adult} onClick={adultIncrease} />
+                <PlusButton
+                  disabled={numberOfPeople.adult === MAXIMUM.adult}
+                  onClick={() => dispatch2({ target: 'adult', type: 'increment' })}
+                />
               </CountWrapper>
             </Row>
             <Row>
               <Label>아이</Label>
               <CountWrapper>
-                <MinusButton disabled={numberOfPeople.children === MINIMUM.children} onClick={childrenDecrease} />
+                <MinusButton
+                  disabled={numberOfPeople.children === MINIMUM.children}
+                  onClick={() => dispatch2({ target: 'children', type: 'decrement' })}
+                />
                 <Count>{numberOfPeople.children}</Count>
-                <PlusButton disabled={numberOfPeople.children === MAXIMUM.children} onClick={childrenIncrease} />
+                <PlusButton
+                  disabled={numberOfPeople.children === MAXIMUM.children}
+                  onClick={() => dispatch2({ target: 'children', type: 'increment' })}
+                />
               </CountWrapper>
             </Row>
           </Selecter>
