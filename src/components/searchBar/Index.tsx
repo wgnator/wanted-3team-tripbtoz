@@ -8,9 +8,11 @@ import DateSelection from './DateSelection';
 import InputSearch from './InputSearch';
 import OptionSelector from './OptionSelector';
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function SearchBar() {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(determineQuery());
@@ -22,7 +24,12 @@ export default function SearchBar() {
         <InputSearch />
         <DateSelection />
         <OptionSelector />
-        <Button onClick={() => dispatch(determineQuery())}>
+        <Button
+          onClick={() => {
+            dispatch(determineQuery());
+            navigate('/');
+          }}
+        >
           <IconWrapper>
             <SearchIcon />
           </IconWrapper>
