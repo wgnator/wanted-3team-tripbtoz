@@ -36,7 +36,6 @@ export default function DetailsPage() {
     const { checkInDate, checkOutDate, numberOfGuests } = reservationInfo;
 
     const currentReservationHotels = getLocalStorage('userHotels', []);
-    console.log('로컬스토리지', typeof currentReservationHotels[0].checkInDate);
     const enteredReservationHotel = {
       hotelName: hotelInfo.hotel_name,
       checkInDate: new Date(checkInDate),
