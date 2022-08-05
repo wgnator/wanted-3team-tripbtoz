@@ -1,4 +1,4 @@
-import { KeyboardEvent, useEffect, useRef, useState } from 'react';
+import { KeyboardEvent, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import SearchIcon from '../../assets/search';
 import XIcon from '../../assets/x';
@@ -11,15 +11,13 @@ import Autocomplete from './Autocomplete';
 interface InputSearchProps {}
 
 export default function InputSearch({}: InputSearchProps) {
-  const inputRef = useRef<HTMLInputElement>(null);
-
   const [isOpen, setIsOpen] = useState(false);
   const [hasXIcon, setHasXIcon] = useState(false);
   const [inputValue, setInputValue] = useState('');
 
   const dispatch = useAppDispatch();
   const clearInput = () => {
-    inputRef.current!.value = '';
+    setInputValue('');
     setHasXIcon(false);
   };
 
@@ -37,6 +35,7 @@ export default function InputSearch({}: InputSearchProps) {
   };
 
   useEffect(() => {
+    if (inputValue) setHasXIcon(true);
     dispatch(setQuery({ hotelName: inputValue }));
   }, [inputValue]);
 
@@ -51,6 +50,8 @@ export default function InputSearch({}: InputSearchProps) {
   const handleKeydown = (event: KeyboardEvent<HTMLInputElement>) => {
     switch (event.code) {
       case 'Enter':
+        if (inputValue === '') return;
+        closeRecommendation();
         dispatch(determineQuery());
         return;
       case 'Escape':
@@ -70,7 +71,6 @@ export default function InputSearch({}: InputSearchProps) {
         onChange={handleOnChange}
         onKeyDown={handleKeydown}
         value={inputValue}
-        ref={inputRef}
       />
       <IconContainer onClick={clearInput}>
         <XIcon hidden={!hasXIcon} />
