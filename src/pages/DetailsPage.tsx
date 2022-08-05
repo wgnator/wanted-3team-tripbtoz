@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import styled from 'styled-components';
+import { Spinner } from '@chakra-ui/spinner';
 import { theme } from '../styles/theme';
 import { useNavigate, useParams } from 'react-router-dom';
 import { MOBILE_BREAKPOINT, TABLET_BREAKPOINT } from '../constants/constants';
@@ -27,7 +28,9 @@ export default function DetailsPage() {
   if (isLoading) {
     return (
       <Container>
-        <Content>Loading....</Content>
+        <SpinnerWrapper>
+          <Spinner size="xl" />
+        </SpinnerWrapper>
       </Container>
     );
   }
@@ -243,4 +246,15 @@ const ReservationButton = styled.button`
   margin-top: 0.6rem;
   border-radius: 4px;
   cursor: pointer;
+`;
+
+const SpinnerWrapper = styled.div`
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  div {
+    margin: 1rem auto;
+    padding: 1rem;
+  }
 `;
