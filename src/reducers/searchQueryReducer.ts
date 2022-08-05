@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { searchQueryType } from '../interfaces/types';
 
 const searchQuerySlice = createSlice({
   name: 'searchQuery',
