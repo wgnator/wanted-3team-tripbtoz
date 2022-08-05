@@ -1,4 +1,3 @@
-import React from "react";
 import styled from "styled-components";
 
 export default function CardSkeleton() {
@@ -8,7 +7,7 @@ export default function CardSkeleton() {
       <ImgWrap/>
       <ContentWrap>
         <HotelRating/>
-        <HotelName/>
+        <HotelName />
         <HotelAddress/>
         <HotelValue/>
         <HotelPrice><p/></HotelPrice>
@@ -21,14 +20,18 @@ export default function CardSkeleton() {
 
 const Container = styled.li`
   position: relative;
-  width: 100%;
-  height: 13rem;
-  margin: 1rem auto;
   color: white;
-  @media print, screen and (min-width: 1024px){
-    border-radius: 4px;
+    border-radius: none;
+  @media (max-width:2560px) {
+    width: 100%;
+    border-radius: 0;
+    margin: 1rem auto;
     box-shadow: rgb(94 94 94 / 20%) 0px 1px 5px 0px;
-  }
+  };
+  @media (max-width: 768px) {
+    width: 99%;
+    margin: 0.2rem auto;
+  };
 `;
 const ImgWrap = styled.div`
   position: absolute;
@@ -37,6 +40,11 @@ const ImgWrap = styled.div`
   left: 0;
   width: 25%;
   height: 100%;
+  border-radius: 0;
+  @media (max-width:2560px) {};
+  @media (max-width: 768px) {
+    width: 40%;
+  }
   background: linear-gradient(
     -250deg,
     #ddd3d3fb,
@@ -47,31 +55,43 @@ const ImgWrap = styled.div`
   background-size: 800% 400%;
   animation: backgroundChange0 5s ease infinite;
   @keyframes backgroundChange0 {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
   }
 `;
 const ContentWrap = styled.div`
   display: inline-block;
-  margin-left: 25%;
-  width: 75%;
-  height: 100%;
-  padding: 1rem 0.8rem;
-  line-height: 18px;
+  @media (max-width:2560px) {
+    margin-left: 25%;
+    width: 75%;
+    height: 13.5rem;
+    padding: 1rem 0.8rem;
+  };
+  @media (max-width: 768px) {
+    margin-left: 40%;
+    width: 60%;
+    height: 10rem;
+    padding: 0.5rem 0.3rem;
+  }
 `;
 const HotelRating = styled.div`
-  @media print, screen and (min-width: 768px){
-    margin-bottom: 7px;
+  @media (max-width:2560px) {
+    width: 7%;
+    height: 1.3rem;
     padding: 0px 4.5px;
+  };
+  @media (max-width: 768px) {
+    width: 26%;
+    padding: 0px 3.5px;
   }
-  width: 10%;
-  height: 1.3rem;
+  
   background: linear-gradient(
     -250deg,
     #ddd3d3fb,
@@ -80,21 +100,27 @@ const HotelRating = styled.div`
   background-size: 800% 400%;
   animation: backgroundChange0 5s ease infinite;
   @keyframes backgroundChange0 {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
   }
 `;
 const HotelName = styled.h2`
-  width: 40%;
-  height: 1.4rem;
-  @media print, screen and (min-width: 768px){
+  @media (max-width:2560px) {
+    width: 50%;
+    height: 1.3rem;
     margin: 7px 0;
+  };
+  @media (max-width: 768px) {
+    width: 90%;
+    height: 1.3rem;
+    margin: 0.3rem 0;
   }
   background: linear-gradient(
     -250deg,
@@ -104,21 +130,29 @@ const HotelName = styled.h2`
   background-size: 800% 400%;
   animation: backgroundChange0 5s ease infinite;
   @keyframes backgroundChange0 {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
   }
 `;
 
 const HotelAddress = styled.div`
-  width: 40%;
-  height: 1rem;
+  
   color: rgb(104, 104, 136);
+  @media (max-width:2560px) {
+    width: 40%;
+    height: 1rem;
+  };
+  @media (max-width: 768px) {
+    width: 70%;
+    height: 1rem;
+  }
   background: linear-gradient(
     -250deg,
     #ddd3d3fb,
@@ -127,21 +161,30 @@ const HotelAddress = styled.div`
   background-size: 800% 400%;
   animation: backgroundChange0 5s ease infinite;
   @keyframes backgroundChange0 {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
   }
 `;
 const HotelValue = styled.div`
   display: flex;
-  width: 30%;
-  height: 1.2rem;
-  margin-top: 1rem;
+
+  @media (max-width:2560px) {
+    width: 30%;
+    height: 1.2rem;
+    margin-top: 1.2rem;
+  };
+  @media (max-width: 768px) {
+    width: 100%;
+    height: 1.2rem;
+    margin-top: 0.4rem;
+  }
   background: linear-gradient(
     -250deg,
     #ddd3d3fb,
@@ -150,43 +193,47 @@ const HotelValue = styled.div`
   background-size: 800% 400%;
   animation: backgroundChange0 5s ease infinite;
   @keyframes backgroundChange0 {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
   }
 `;
 const HotelPrice = styled.div`
-  @media print, screen and (min-width: 768px){
-    margin-top: 40px;
-    line-height: 16px;
-  }
   p{
-    @media print, screen and (min-width: 768px){
+    @media (max-width:2560px) {
+      margin-top: 2.3rem;
       float: right;
-      width: 15%;
+      width: 18%;
+      height: 1.2rem;
+    };
+    @media (max-width: 768px) {
+      margin-top: 1rem;
+      width: 70%;
       height: 1.1rem;
-  background: linear-gradient(
-    -250deg,
-    #ddd3d3fb,
-    #a59e9efa
-  );
-  background-size: 800% 400%;
-  animation: backgroundChange0 5s ease infinite;
-  @keyframes backgroundChange0 {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
+    }
+    background: linear-gradient(
+      -250deg,
+      #ddd3d3fb,
+      #a59e9efa
+    );
+    background-size: 800% 400%;
+    animation: backgroundChange0 5s ease infinite;
+    @keyframes backgroundChange0 {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
     }
   }
 `;
@@ -194,27 +241,36 @@ const HotelNotPrice = styled.div`
   width: 100%;
   height: 1rem;
   float: right;
-  margin-top: 0.1rem;
   p{
     float: right;
-    width: 17%;
-    height: 0.7rem;
-  background: linear-gradient(
-    -250deg,
-    #ddd3d3fb,
-    #a59e9efa
-  );
-  background-size: 800% 400%;
-  animation: backgroundChange0 5s ease infinite;
-  @keyframes backgroundChange0 {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
+    @media (max-width:2560px) {
+      width: 15%;
+      height: 0.8rem;
+      margin-top: 0.1rem;
+    };
+    @media (max-width: 768px) {
+      width: 60%;
+      height: 0.8rem;
+      margin-top: 0.1rem;
+    }
+
+    background: linear-gradient(
+      -250deg,
+      #ddd3d3fb,
+      #a59e9efa
+    );
+    background-size: 800% 400%;
+    animation: backgroundChange0 5s ease infinite;
+    @keyframes backgroundChange0 {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
   }
 `;
