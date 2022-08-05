@@ -9,32 +9,34 @@ import { Hotel } from "../interfaces/types";
 
  export default function MainPage() {
   const [dataLoading,setDataLoading] = React.useState<boolean>(true);
-  const [viewTarget,setVeiwTarget] = React.useState<Element | null>(null);
+  const [viewTarget,setVeiwTarget] = React.useState<Element>(null);
   const [isLastData,setIsLastData] = React.useState<boolean>(false);
-  const pageRef = React.useRef<number | null >(null);
-  const {isLoading,hotels,getResultsByPage} = useHotels();  
+  const pageRef = React.useRef<number | null >(1);
+  const {isLoading,hotels,getResultsByPage} = useHotels();
   const searchQuery = useAppSelector((state) => state.searchQuery.determined);
 
   const fetchData = () => {
-    if(hotels.length < pageRef.current * 10)setIsLastData(true)
-    pageRef.current = pageRef.current === null ? 1 : pageRef.current + 1;
-    if(searchQuery.hotelName !== '') pageRef.current = 1
     getResultsByPage(pageRef.current , searchQuery);
   };
 
-
-
   React.useEffect(()=>{
+    pageRef.current = 1
+    setIsLastData(false)
     if(searchQuery.checkInDate !== ''){
       fetchData()
     }
-    console.log(searchQuery);
-    
   },[searchQuery])
 
   const observerCallback = (entries:any) => {
     const [entry] = entries
-    if(entry.isIntersecting) fetchData()
+    if(entry.isIntersecting){
+      if(hotels.length < pageRef.current * 10) {
+        setIsLastData(true)
+      }
+      pageRef.current = pageRef.current + 1
+      fetchData()
+      
+    }
   }
   const options = {
     root:null,
@@ -49,8 +51,6 @@ import { Hotel } from "../interfaces/types";
   },[viewTarget])
 
   React.useEffect(()=>{
-    console.log(hotels);
-    
     hotels.length && setDataLoading(false)
     window.scrollTo({
       top: window.pageYOffset - window.pageYOffset/500,
