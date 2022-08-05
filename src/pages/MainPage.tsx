@@ -9,17 +9,17 @@ import { Hotel } from "../interfaces/types";
 
  export default function MainPage() {
   const [dataLoading,setDataLoading] = React.useState<boolean>(true);
-  const [viewTarget,setVeiwTarget] = React.useState<Element>(null);
+  const [viewTarget,setVeiwTarget] = React.useState<Element | null>(null);
   const [isLastData,setIsLastData] = React.useState<boolean>(false);
-  const pageRef = React.useRef<number | null >(1);
+  const pageRef = React.useRef<number>(1);
   const {isLoading,hotels,getResultsByPage} = useHotels();
   const searchQuery = useAppSelector((state) => state.searchQuery.determined);
 
   const fetchData = () => {
     getResultsByPage(pageRef.current , searchQuery);
   };
-
   React.useEffect(()=>{
+    window.scrollTo(0, 0);
     pageRef.current = 1
     setIsLastData(false)
     if(searchQuery.checkInDate !== ''){
@@ -35,7 +35,6 @@ import { Hotel } from "../interfaces/types";
       }
       pageRef.current = pageRef.current + 1
       fetchData()
-      
     }
   }
   const options = {
@@ -72,13 +71,12 @@ import { Hotel } from "../interfaces/types";
           <div key={hotel.hotel_name+index}>
             <MainHotelCard  hotel={hotel} />
             {isLastIndex && 
-            <Target ref={ isLastData ? null : hotels.length > 9 ? setVeiwTarget : null} >
+            <Target ref={ isLastData ? null : hotels.length > 9 ? setVeiwTarget : null } >
               {isLastData ? <LastData>마지막 입니다</LastData> : isLoading && <Spinner size="xl" />}
             </Target>}
           </div>)
         })}
       </HotelCards>
-      
     </Container>
   );
 }
