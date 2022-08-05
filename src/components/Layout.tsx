@@ -1,16 +1,23 @@
-import { Outlet, useLocation, useMatch } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Outlet, Route, Routes, useLocation } from 'react-router-dom';
 import Header from './Header';
 import SearchBar from './searchBar/Index';
 
 export default function Layout() {
-  const locate = useLocation();
-  const hasSearchBar =
-    locate.pathname === '/detail' || locate.pathname === '/' || useMatch({ path: '/details/:hotelName' });
+  const location = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
 
   return (
     <>
       <Header />
-      {hasSearchBar && <SearchBar />}
+      <Routes>
+        <Route path="/" element={<SearchBar />} />
+        <Route path="/details" element={<SearchBar />} />
+        <Route path="/details/*" element={<SearchBar />} />
+      </Routes>
       <Outlet />
     </>
   );

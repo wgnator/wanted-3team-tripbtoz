@@ -2,22 +2,17 @@ import { useEffect } from 'react';
 import styled from 'styled-components';
 import { Spinner } from '@chakra-ui/spinner';
 import { theme } from '../styles/theme';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { MOBILE_BREAKPOINT, TABLET_BREAKPOINT } from '../constants/constants';
 import useHotels from '../hooks/useHotels';
 import { useAppSelector } from '../hooks/reduxHooks';
 import { getLocalStorage, setLocalStorage } from '../utils/storage';
 
 export default function DetailsPage() {
-  const location = useLocation();
   const { getHotelInfo, hotelInfo, isLoading } = useHotels();
   const { hotelName } = useParams();
   const reservationInfo = useAppSelector((state) => state.searchQuery.determined);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [location.pathname]);
 
   useEffect(() => {
     hotelName && getHotelInfo(hotelName);
