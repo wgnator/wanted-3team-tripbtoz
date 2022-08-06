@@ -129,13 +129,11 @@ interface UserDataType {
   - getLocalStorage, setLocatStorage 함수
 ```
 
-```
-##한운기 
-- Date Picker 구현
-- 검색 쿼리 상태를 전역으로 관리하기 위한 Redux 셋팅 및 컴포넌트 연결
-```
 
-```
+>한운기 
+>- Date Picker 구현
+>- 검색 쿼리 상태를 전역으로 관리하기 위한 Redux 셋팅 및 컴포넌트 연결
+
 ##이성진
 - Search Bar Layout
   - 모바일, 데스크톱 반응형 디자인
@@ -144,6 +142,7 @@ interface UserDataType {
   - Option Selector(인원수 표시, 선택 창)
   - 검색 버튼
 ```
+|제목|내용|설명
 
 |##정윤서|
 |- HotelCard CSS 구현 |
