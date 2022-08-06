@@ -1,6 +1,6 @@
 # wanted-3team-tripbtoz
 <img src="https://img.shields.io/badge/React-61DAFB?style=flat&logo=React&logoColor=white">
-<img src="https://user-images.githubusercontent.com/91608021/183232719-6179cb2c-b82d-4585-9731-567855ad7dc4.svg">
+<img src="https://user-images.githubusercontent.com/91608021/183232811-de52a1cf-cccc-44ed-b5d7-25396d3b3b31.png">
 ## 프로젝트 설치 · 실행 방법!
 
 
