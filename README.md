@@ -120,37 +120,37 @@ interface UserDataType {
 - [ ] localstorage에 호텔명을 key로 하는 json value를 저장한다.
 
 ##### 각 팀원의 역활
-```
-##조혜빈
-- API 모듈
-  - useHotels 훅 구현
-    - getResultsByPage로 searchParameter를 전달받아 목록 요청
-    - 무한스크롤 구현을 위해 page별로 10개씩 요청
-  - getLocalStorage, setLocatStorage 함수
-```
+
+>**조혜빈**
+>- API 모듈
+>  - useHotels 훅 구현
+>    - getResultsByPage로 searchParameter를 전달받아 목록 요청
+>    - 무한스크롤 구현을 위해 page별로 10개씩 요청
+>  - getLocalStorage, setLocatStorage 함수
+>
 
 
 >**한운기**
 >- Date Picker 구현
 >- 검색 쿼리 상태를 전역으로 관리하기 위한 Redux 셋팅 및 컴포넌트 연결
+>
 
-##이성진
-- Search Bar Layout
-  - 모바일, 데스크톱 반응형 디자인
-  - Search Input
-  - Date Selector 표시창
-  - Option Selector(인원수 표시, 선택 창)
-  - 검색 버튼
-```
-|제목|내용|설명
+>**이성진**
+>- Search Bar Layout
+>  - 모바일, 데스크톱 반응형 디자인
+>  - Search Input
+>  - Date Selector 표시창
+>  - Option Selector(인원수 표시, 선택 창)
+>  - 검색 버튼
+>
 
-|##정윤서|
-|- HotelCard CSS 구현 |
-|- Infinite Scroll 구현 |
-|  - IntersectionObserver API 사용하여 Infinite Scroll 작업 |
-|- Skeleton UI 구현 |
-|- 데이터 렌더링 구현 |
-
+>**정윤서**
+>- HotelCard CSS 구현 
+>- Infinite Scroll 구현 
+>  - IntersectionObserver API 사용하여 Infinite Scroll 작업 
+>- Skeleton UI 구현 
+>- 데이터 렌더링 구현 
+>
 ```
 김영호
 - 호텔 상세페이지
