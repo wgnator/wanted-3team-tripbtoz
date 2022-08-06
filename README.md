@@ -1,5 +1,5 @@
 # wanted-3team-tripbtoz
-
+<img src="https://img.shields.io/badge/React-61DAFB?style=flat&logo=React&logoColor=white"/>
 ## 프로젝트 설치 · 실행 방법
 
 1. 프로젝트 클론
@@ -146,14 +146,13 @@ interface UserDataType {
   - 검색 버튼
 ```
 
-```
-##정윤서
-- HotelCard CSS 구현
-- Infinite Scroll 구현
-  - IntersectionObserver API 사용하여 Infinite Scroll 작업
-- Skeleton UI 구현
-- 데이터 렌더링 구현
-```
+##정윤서|
+- HotelCard CSS 구현 |
+- Infinite Scroll 구현 |
+  - IntersectionObserver API 사용하여 Infinite Scroll 작업 |
+- Skeleton UI 구현 |
+- 데이터 렌더링 구현 |
+
 ```
 김영호
 - 호텔 상세페이지
