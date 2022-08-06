@@ -118,8 +118,8 @@ interface UserDataType {
 
 - [x] 예약 버튼을 구현 하고 해당 버튼의 이벤트로 저장을 수행한다.
 - [ ] localstorage에 호텔명을 key로 하는 json value를 저장한다.
-<hr/>
-##### 각 팀원의 역활
+
+#### 각 팀원의 역활
 
 >**조혜빈**
 >- API 모듈
@@ -129,11 +129,9 @@ interface UserDataType {
 >  - getLocalStorage, setLocatStorage 함수
 >
 
-<hr/>
 >**한운기**
 >- Date Picker 구현
 >- 검색 쿼리 상태를 전역으로 관리하기 위한 Redux 셋팅 및 컴포넌트 연결
-<hr/>
 
 >**이성진**
 >- Search Bar Layout
@@ -142,7 +140,6 @@ interface UserDataType {
 >  - Date Selector 표시창
 >  - Option Selector(인원수 표시, 선택 창)
 >  - 검색 버튼
-<hr/>
 
 >**정윤서**
 >- HotelCard CSS 구현 
@@ -150,13 +147,11 @@ interface UserDataType {
 >  - IntersectionObserver API 사용하여 Infinite Scroll 작업 
 >- Skeleton UI 구현 
 >- 데이터 렌더링 구현 
-<hr/>
 
-**김영호**
+>**김영호**
 >- 호텔 상세페이지
 >    - 반응형 UI 구현
 >    - URL을 통해 존재하지 않는 호텔에 접근할 경우 메인으로 리다이렉트 처리
 >    - 예약 기능 구현
 >- 예약 리스트 페이지
 >    - UI 구현
-<hr/>
