@@ -60,7 +60,6 @@ interface UserDataType {
   numberOfGuests: number;
 }
 ```
-
 ## 예약 페이지 개발 요구사항
 
 - [x] 체크 인/아웃 날짜를 선택할 수 있는 캘린더 구현
@@ -146,12 +145,12 @@ interface UserDataType {
   - 검색 버튼
 ```
 
-##정윤서|
-- HotelCard CSS 구현 |
-- Infinite Scroll 구현 |
-  - IntersectionObserver API 사용하여 Infinite Scroll 작업 |
-- Skeleton UI 구현 |
-- 데이터 렌더링 구현 |
+|##정윤서|
+|- HotelCard CSS 구현 |
+|- Infinite Scroll 구현 |
+|  - IntersectionObserver API 사용하여 Infinite Scroll 작업 |
+|- Skeleton UI 구현 |
+|- 데이터 렌더링 구현 |
 
 ```
 김영호
