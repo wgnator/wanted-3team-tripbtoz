@@ -76,7 +76,7 @@ interface UserDataType {
 
 #### 캘린더
 
-- [ ] 오늘 날짜부터 12개월까지 보여지는 캘린더를 반응형으로 구현
+- [x] 오늘 날짜부터 12개월까지 보여지는 캘린더를 반응형으로 구현
 - [x] 이번달의 지난날은 모두 선택되지 않아야 함
 - [x] 처음 캘린더를 선택할 때 default로 일주일 뒤 1박으로 체크인 되도록 함
 - [x] 처음 선택한 날이 체크인이 되며 두 번째 선택한 날이 체크아웃으로 설정됨
@@ -119,3 +119,45 @@ interface UserDataType {
 
 - [x] 예약 버튼을 구현 하고 해당 버튼의 이벤트로 저장을 수행한다.
 - [ ] localstorage에 호텔명을 key로 하는 json value를 저장한다.
+
+##### 각 팀원의 역활
+```
+##조혜빈
+- API 모듈
+  - useHotels 훅 구현
+    - getResultsByPage로 searchParameter를 전달받아 목록 요청
+    - 무한스크롤 구현을 위해 page별로 10개씩 요청
+  - getLocalStorage, setLocatStorage 함수
+```
+
+```
+##한운기 
+- Date Picker 구현
+- 검색 쿼리 상태를 전역으로 관리하기 위한 Redux 셋팅 및 컴포넌트 연결
+```
+
+```
+##이성진
+- Search Bar Layout
+  - 모바일, 데스크톱 반응형 디자인
+  - Search Input
+  - Date Selector 표시창
+  - Option Selector(인원수 표시, 선택 창)
+  - 검색 버튼
+
+##정윤서
+- HotelCard CSS 구현
+- Infinite Scroll 구현
+  - IntersectionObserver API 사용하여 Infinite Scroll 작업
+- Skeleton UI 구현
+- 데이터 렌더링 구현
+```
+```
+김영호
+- 호텔 상세페이지
+    - 반응형 UI 구현
+    - URL을 통해 존재하지 않는 호텔에 접근할 경우 메인으로 리다이렉트 처리
+    - 예약 기능 구현
+- 예약 리스트 페이지
+    - UI 구현
+```
