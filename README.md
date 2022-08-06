@@ -144,7 +144,9 @@ interface UserDataType {
   - Date Selector 표시창
   - Option Selector(인원수 표시, 선택 창)
   - 검색 버튼
+```
 
+```
 ##정윤서
 - HotelCard CSS 구현
 - Infinite Scroll 구현
