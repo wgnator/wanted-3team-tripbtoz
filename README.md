@@ -1,9 +1,8 @@
 # wanted-3team-tripbtoz
-<img src="https://img.shields.io/badge/TypeScript-3178C6?style=flat&logo=TypeScript&logoColor=white"> <img src="https://img.shields.io/badge/React-61DAFB?style=flat&logo=React&logoColor=white"> <img src="https://img.shields.io/badge/-Redux-%23764ABC">
-
+<img src="https://img.shields.io/badge/TypeScript-3178C6?style=flat&logo=TypeScript&logoColor=white"> <img src="https://img.shields.io/badge/React-61DAFB?style=flat&logo=React&logoColor=white"> <img src ="https://img.shields.io/badge/Redux-764ABC?&style=flta&logo=Redux&logoColor=white"/>
 ## 프로젝트 설치 · 실행 방법!
 
-<img alt="Python" src ="https://img.shields.io/badge/Redux-#764ABC?&style=for-the-badge&logo=Redux&logoColor=white"/>
+
 1. 프로젝트 클론
 ![redux](https://user-images.githubusercontent.com/91608021/183233034-6f30e906-482e-4e6f-a62b-2a1a659d57ed.svg)
 
