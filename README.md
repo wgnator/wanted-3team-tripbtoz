@@ -3,8 +3,9 @@
 
 ## 프로젝트 설치 · 실행 방법!
 
-
+<img alt="Python" src ="https://img.shields.io/badge/Redux-#764ABC.svg?&style=for-the-badge&logo=Redux&logoColor=white"/>
 1. 프로젝트 클론
+![redux](https://user-images.githubusercontent.com/91608021/183233034-6f30e906-482e-4e6f-a62b-2a1a659d57ed.svg)
 
 ```
 git clone https://github.com/Avoler0/wanted-3team-tripbtoz.git
