@@ -25,16 +25,6 @@ export default function DetailsPage() {
     navigate('/');
   }, [isLoading, hotelInfo]);
 
-  if (isLoading) {
-    return (
-      <Container>
-        <SpinnerWrapper>
-          <Spinner size="xl" />
-        </SpinnerWrapper>
-      </Container>
-    );
-  }
-
   const handleReservationClick = () => {
     const { checkInDate, checkOutDate, numberOfGuests } = reservationInfo;
 
@@ -50,6 +40,16 @@ export default function DetailsPage() {
     alert('예약이 완료되었습니다!');
     navigate('/');
   };
+
+  if (isLoading) {
+    return (
+      <Container>
+        <SpinnerWrapper>
+          <Spinner size="xl" />
+        </SpinnerWrapper>
+      </Container>
+    );
+  }
 
   return (
     <Container>
